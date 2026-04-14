@@ -10,13 +10,13 @@
 - 先生成摘要，再删除历史会话
 - 必要文件必须保留
 - 删除前必须确认
-- 若已有旧摘要，优先更新，不重复生成多个摘要
+- 若已有旧摘要，优先更新 latest，不重复制造摘要噪音
+- 保留时间戳历史版本 + latest 快捷入口
 - 删完后以后续摘要 + 文件继续执行
 
-## 文件规则
-- 支持必要文件分类：P0 / P1 / P2
-- 支持摘要质量检查
-- 支持必要文件人工确认清单
+## 推荐目录
+- `/var/minis/workspace/session-handoffs/<topic>/`
+- `/var/minis/shared/<topic>/session-handoffs/`
 
 ## 辅助脚本
 - `references/write_session_summary.sh`
@@ -24,3 +24,5 @@
 - `references/build_handoff_template.sh`
 - `references/score_summary_quality.sh`
 - `references/rank_required_files.sh`
+- `references/write_versioned_summary.sh`
+- `references/write_versioned_handoff.sh`

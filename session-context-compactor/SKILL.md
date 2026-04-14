@@ -156,8 +156,23 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 
 如果已经存在旧摘要文件：
 - 优先**更新旧摘要**，而不是重复生成多个 `session-summary.md` / `handoff.md`
-- 同一主题尽量只保留 **1 份当前有效摘要**
-- 旧摘要若已过时，可归档或覆盖更新
+- 同一主题尽量只保留 **1 份当前有效摘要** 作为 latest 快捷入口
+- 历史版本则按时间戳保留
+
+### 命名与落盘策略
+推荐使用：
+- 历史版本：`YYYYMMDD-HHMM-session-summary.md`
+- 历史版本：`YYYYMMDD-HHMM-handoff.md`
+- 最新快捷入口：`session-summary-latest.md`
+- 最新快捷入口：`handoff-latest.md`
+
+推荐目录：
+- `/var/minis/workspace/session-handoffs/<topic>/`
+- `/var/minis/shared/<topic>/session-handoffs/`
+
+推荐路径示例：
+- `/var/minis/workspace/session-handoffs/open-minis-memory-store/20260415-0245-session-summary.md`
+- `/var/minis/workspace/session-handoffs/open-minis-memory-store/session-summary-latest.md`
 
 推荐路径：
 - `/var/minis/workspace/session-summary.md`
@@ -280,6 +295,8 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 - `references/build_handoff_template.sh`
 - `references/score_summary_quality.sh`
 - `references/rank_required_files.sh`
+- `references/write_versioned_summary.sh`
+- `references/write_versioned_handoff.sh`
 
 ---
 
