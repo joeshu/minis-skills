@@ -10,7 +10,8 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 ## TL;DR
 - **先整理，再删除**：删除历史会话前必须先生成执行摘要
 - **必要文件必须保留**：不能只删对话不保留产物
-- **后续继续时优先看摘要和保留文件**
+- **跨会话优先写入 `/var/minis/shared/`**：避免新会话独立容器读不到 `workspace` 文件
+- **后续继续时优先看共享摘要和保留文件**
 - **目标是减小读取负担，不影响后续执行**
 
 ## 核心能力
@@ -52,7 +53,8 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 
 ### 风险点
 - 如果摘要不完整、必要文件漏保留，删除历史会话后会影响后续接续执行
-- 因此删除前必须先检查摘要和保留文件清单
+- 如果摘要只写在 `/var/minis/workspace/`，而新会话运行在独立容器/独立工作区中，可能无法读取该文件
+- 因此用于**跨会话接续**时，摘要与 handoff 默认应落到 `/var/minis/shared/`
 
 ---
 
@@ -160,6 +162,10 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 - 历史版本则按时间戳保留
 
 ### 命名与落盘策略
+#### 默认规则
+- **同会话临时使用**：可写入 `/var/minis/workspace/`
+- **跨会话继续使用**：默认优先写入 `/var/minis/shared/`
+
 推荐使用：
 - 历史版本：`YYYYMMDD-HHMM-session-summary.md`
 - 历史版本：`YYYYMMDD-HHMM-handoff.md`
@@ -167,17 +173,13 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 - 最新快捷入口：`handoff-latest.md`
 
 推荐目录：
-- `/var/minis/workspace/session-handoffs/<topic>/`
+- `/var/minis/shared/session-handoffs/<topic>/`
 - `/var/minis/shared/<topic>/session-handoffs/`
+- `/var/minis/workspace/session-handoffs/<topic>/`（仅当前会话临时调试时使用）
 
 推荐路径示例：
-- `/var/minis/workspace/session-handoffs/open-minis-memory-store/20260415-0245-session-summary.md`
-- `/var/minis/workspace/session-handoffs/open-minis-memory-store/session-summary-latest.md`
-
-推荐路径：
-- `/var/minis/workspace/session-summary.md`
-- `/var/minis/workspace/handoff.md`
-- `/var/minis/shared/<topic>/execution-context.md`
+- `/var/minis/shared/session-handoffs/open-minis-memory-store/20260415-0245-session-summary.md`
+- `/var/minis/shared/session-handoffs/open-minis-memory-store/session-summary-latest.md`
 
 ### Phase E：删除前确认
 删除历史会话前必须确认：
@@ -297,6 +299,11 @@ description: 将当前会话整理为精简执行摘要，提取目标、约束�
 - `references/rank_required_files.sh`
 - `references/write_versioned_summary.sh`
 - `references/write_versioned_handoff.sh`
+
+### 跨会话启动规则
+如果下一次会话运行环境可能是独立容器/独立工作区：
+- 启动提示词应优先引用 `/var/minis/shared/...` 下的摘要文件
+- 不应默认引用 `/var/minis/workspace/...` 中的 handoff 文件
 
 ---
 

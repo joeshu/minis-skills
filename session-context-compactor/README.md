@@ -11,12 +11,14 @@
 - 必要文件必须保留
 - 删除前必须确认
 - 若已有旧摘要，优先更新 latest，不重复制造摘要噪音
-- 保留时间戳历史版本 + latest 快捷入口
-- 删完后以后续摘要 + 文件继续执行
+- **跨会话默认优先写入 `/var/minis/shared/`**
+- 不要默认依赖 `/var/minis/workspace/` 作为新会话 handoff 入口
+- 删完后以后续共享摘要 + 文件继续执行
 
 ## 推荐目录
-- `/var/minis/workspace/session-handoffs/<topic>/`
+- `/var/minis/shared/session-handoffs/<topic>/`
 - `/var/minis/shared/<topic>/session-handoffs/`
+- `/var/minis/workspace/session-handoffs/<topic>/`（仅当前会话临时调试）
 
 ## 辅助脚本
 - `references/write_session_summary.sh`
