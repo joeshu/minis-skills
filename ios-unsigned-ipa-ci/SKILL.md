@@ -5,8 +5,15 @@ description: 为 iOS SwiftUI/XcodeGen 项目创建或维护 GitHub Actions 未�
 
 # make-ipa
 
-**技能名称**: make-ipa  
-**目标**: 帮助用户把 iOS（SwiftUI / XcodeGen）项目完整地上传到 GitHub，自动化生成 **未签名 device‑only IPA** 并通过 GitHub Actions 持续交付。
+用于为 iOS（SwiftUI / XcodeGen）项目创建或维护 GitHub Actions 未签名 IPA 构建流水线。
+
+## TL;DR
+- **先判模式**：已有成功 workflow / artifact / 工程结构 ⇒ 进 **模式 B**；否则进 **模式 A**
+- **模式 A**：生成项目文件 + workflow + 首次 push + 跑通 CI + 下载 IPA
+- **模式 B**：默认**只改代码**，不改 workflow；push 后查 run，成功下 IPA，失败下日志
+- **高影响操作必须确认**：首次建 workflow、首次 push、覆盖工程文件、force push
+- **优先用内置脚本**：`mode_detect.sh` → `check_actions.sh` → `download_ipa.sh` / `download_build_log.sh`
+
 
 ## 触发词
 - iOS应用构建、IPA生成、iOS CI
@@ -191,7 +198,7 @@ git remote -v
 
 ## 9️⃣ 迭代输出格式（统一报告）
 
-### 8.1 首轮打通（模式 A）
+### 9.1 首轮打通（模式 A）
 ```
 ✅ **首轮打通完成**
 **仓库**: https://github.com/<owner>/<repo>
@@ -210,7 +217,7 @@ git remote -v
 如需后续迭代，只需提交代码，系统会自动触发 CI。
 ```
 
-### 8.2 后续迭代（模式 B）
+### 9.2 后续迭代（模式 B）
 ```
 🔄 **后续迭代报告**
 **Commit**: abcdef1 (feat: improve quick test button interaction)
@@ -242,11 +249,12 @@ git remote -v
 | `generate_project.py` | 根据 `ci-config.yml` 渲染 Jinja2 模板，生成 `project.yml`、Swift 代码，返回文件路径列表 |
 | `generate_workflow.py` | 渲染 `build-unsigned-ipa.yml`（Jinja2），支持 `workflow_name` 参数 |
 | `ci_manager.sh` | 1️⃣ 判定模式（A/B）<br>2️⃣ 根据模式调用相应的生成/提交脚本<br>3️⃣ 使用 `git` 检查 remote、branch、status<br>4️⃣ 调用 GitHub API（`curl -H "Authorization: token $GITHUB_TOKEN"`）获取最近一次 workflow run 状态 |
-| `post_process.py` | 读取 CI 运行结果（`jobs[].conclusion`），生成 **8.1 / 8.2** 报告 Markdown 并写入 `/var/minis/attachments/report.md`（随后返回 `minis://attachments/report.md`） |
+| `post_process.py` | 读取 CI 运行结果（`jobs[].conclusion`），生成 **9.1 / 9.2** 报告 Markdown 并写入 `/var/minis/attachments/report.md`（随后返回 `minis://attachments/report.md`） |
 | `failure_handler.sh` | 根据 `git push` 或 `workflow run` 的错误码分支处理，输出明确的诊断信息（SSH、Token、网络、代码） |
 | `references/mode_detect.sh` | 快速判定本地项目应进入模式 A 还是模式 B |
 | `references/check_actions.sh` | 查询最近 GitHub Actions runs，输出结构化 JSON |
 | `references/download_ipa.sh` | 下载最近成功 run 的 artifact 并提取 IPA 到 `/var/minis/attachments/` |
+| `references/download_build_log.sh` | 下载最近失败 run 的日志并汇总到 `/var/minis/attachments/` |
 
 > **工具依赖（Minis Alpine）**  
 `apk add git curl jq python3 py3-pip bash`  
@@ -258,11 +266,11 @@ git remote -v
 
 > 适用场景：用户说“检查 action”“查询构建状态”“下载 ipa”。
 
-### 9.1 前置条件
+### 10.1 前置条件
 - 必须有 `GITHUB_TOKEN` 环境变量（具备 repo 读取权限；私有仓库需对应访问权限）。
 - 禁止输出 token 明文；仅在命令中引用 `$GITHUB_TOKEN`。
 
-### 9.2 查询最近运行状态（推荐 API）
+### 10.2 查询最近运行状态（推荐 API）
 优先用 REST API 获取最近 5 条运行记录并结构化输出：
 
 ```sh
@@ -282,7 +290,7 @@ curl -sSL \
 
 当最新 run 为 `in_progress` 时，轮询 `GET /actions/runs/{run_id}`，直到 `status=completed`。
 
-### 9.3 下载失败日志用于定位
+### 10.3 下载失败日志用于定位
 当 `conclusion=failure`：
 
 1. 下载日志 zip：
@@ -300,7 +308,7 @@ grep -Rin "error:\|BUILD FAILED\|warning:" run_logs
 ```
 3. 把关键错误行反馈给用户，并给出修复提交。
 
-### 9.4 下载成功构建的 IPA（artifact）
+### 10.4 下载成功构建的 IPA（artifact）
 当 `conclusion=success`：
 
 1. 查询 artifacts：
@@ -322,7 +330,7 @@ unzip -o -q artifact.zip
 4. 将 `.ipa` 复制到 `/var/minis/attachments/`，在回复中给出可点击链接：
 `[下载 xxx.ipa](minis://attachments/xxx.ipa)`
 
-### 9.5 输出规范（状态 + 下载）
+### 10.5 输出规范（状态 + 下载）
 技能输出应包含：
 - 最新 run 编号、提交短 SHA、状态/结论
 - 若失败：关键报错 + 已执行修复（如有）
