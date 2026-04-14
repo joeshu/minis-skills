@@ -1,95 +1,43 @@
-# 文件备份技能说明
+# 文件备份技能
 
-## 概述
-这是一个专门用于文件和代码修改时自动创建备份的技能，确保所有修改操作都可以安全回退。
+用途：在你需要保留回滚点时创建备份；普通修改默认不强制备份。按达尔文评分标准，这个技能优先强调：触发条件、线性工作流、边界条件、检查点和测试样例。
 
-## 快速开始
+## 什么时候用
+- 你明确要求先备份
+- 删除文件/目录前
+- 批量替换前
+- 重构/迁移前
+- 关键配置修改前
+- 想恢复最近一次备份
+- 想清理旧备份
 
-### 1. 基础备份
-```bash
-# 备份单个文件
-backup_file /path/to/config.conf
+## 默认策略
+- 普通低风险修改：不强制备份
+- 关键节点：建议用 `smart`
+- 智能备份默认：600 秒窗口，保留最近 5 份
 
-# 带时间戳备份
-backup_file /path/to/config.conf timestamp
-
-# 带版本号备份
-backup_file /path/to/config.conf version
+## 常用命令
+```sh
+/var/minis/skills/file-backup-skill/scripts/backup.sh smart /path/to/file
+/var/minis/skills/file-backup-skill/scripts/backup.sh file /path/to/file
+/var/minis/skills/file-backup-skill/scripts/backup.sh dir /path/to/dir
+/var/minis/skills/file-backup-skill/scripts/backup.sh latest /path/to/file
+/var/minis/skills/file-backup-skill/scripts/backup.sh restore-latest /path/to/file
+/var/minis/skills/file-backup-skill/scripts/backup.sh clean /path/to/file 5
 ```
 
-### 2. 批量备份
-```bash
-# 批量备份多个文件
-backup_batch /path/to/file1.txt /path/to/file2.txt /path/to/file3.txt
+## 检查点
+以下情况建议先确认：
+- 删除目录前
+- 批量替换多个关键文件前
+- 清理旧备份前
+- restore 会覆盖现有文件时
+
+## 恢复
+```sh
+# 恢复指定备份
+/var/minis/skills/file-backup-skill/scripts/backup.sh restore /path/to/a.txt.20260415_061500.bak
+
+# 恢复最近一次备份
+/var/minis/skills/file-backup-skill/scripts/backup.sh restore-latest /path/to/a.txt
 ```
-
-### 3. 查看历史
-```bash
-# 查看文件备份历史
-backup_history /path/to/config.conf
-```
-
-## 配置
-
-### 全局配置
-```bash
-# 设置默认备份策略
-backup_config set default_strategy timestamp
-
-# 设置最大备份数量
-backup_config set max_backups 10
-
-# 启用自动清理
-backup_config set auto_cleanup true
-
-# 查看当前配置
-backup_config show
-```
-
-## 错误处理
-
-### 常见错误代码
-- 0: 备份成功
-- 1: 备份失败
-- 2: 权限不足
-- 3: 磁盘空间不足
-- 4: 文件不存在
-
-### 错误日志
-```bash
-# 查看错误日志
-tail -f ~/.backup_logs/error.log
-
-# 查看详细统计
-backup_stats
-```
-
-## 集成使用
-
-### 与其他技能配合
-```bash
-# 修改文件前备份
-backup_file /path/to/code.py
-# 然后进行代码修改
-```
-
-### 自动化脚本
-```bash
-#!/bin/bash
-# 自动备份脚本
-backup_file "$1" "timestamp"
-# 执行修改操作
-# ...
-# 如果需要恢复
-# backup_restore "$1" --backup "$1_$(date +%Y%m%d_%H%M%S).bak"
-```
-
-## 注意事项
-
-1. 确保对目标文件有读取权限
-2. 大文件备份前检查磁盘空间
-3. 重要文件建议使用Git备份
-4. 定期清理过期备份文件
-
-## 支持
-如有问题请查看日志文件或联系技能维护者。
