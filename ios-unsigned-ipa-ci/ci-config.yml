@@ -1,0 +1,12 @@
+repo: https://github.com/yourname/ios-demo
+branch: main
+scheme: DemoApp
+target: DemoApp
+export_options: ExportOptions.plist
+artifact_name: DemoApp.ipa
+workflow_name: build-unsigned-ipa.yml
+signing: false
+locales:
+  - en
+  - zh-Hans
+  - ja

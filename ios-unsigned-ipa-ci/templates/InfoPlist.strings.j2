@@ -1,0 +1,9 @@
+{% for locale in locales %}
+{% if locale == "en" %}
+"CFBundleDisplayName" = "DemoApp";
+{% elif locale == "zh-Hans" %}
+"CFBundleDisplayName" = "演示应用";
+{% elif locale == "ja" %}
+"CFBundleDisplayName" = "デモアプリ";
+{% endif %}
+{% endfor %}

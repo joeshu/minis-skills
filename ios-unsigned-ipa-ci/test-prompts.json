@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我创建一个iOS应用的CI流水线，生成未签名IPA",
+    "expected": "应该进入模式A，创建完整的项目结构和workflow，并成功生成IPA"
+  },
+  {
+    "id": 2,
+    "prompt": "我有一个现有的iOS项目，需要优化代码并重新构建IPA",
+    "expected": "应该进入模式B，只优化代码而不修改workflow，保持CI稳定性"
+  },
+  {
+    "id": 3,
+    "prompt": "检查GitHub Actions的构建状态并下载最新的IPA",
+    "expected": "应该查询API状态，下载构建日志或IPA文件，提供清晰的状态报告"
+  },
+  {
+    "id": 4,
+    "prompt": "CI构建失败了，帮我分析错误并修复",
+    "expected": "应该下载构建日志，分析错误原因，提供修复建议并自动修复代码"
+  }
+]
