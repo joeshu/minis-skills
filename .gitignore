@@ -1,0 +1,12 @@
+# Backup files
+*.bak
+*.bak-*
+
+# Temporary files
+*.tmp
+*.log
+*.zip
+
+# macOS / editor noise
+.DS_Store
+*.swp
