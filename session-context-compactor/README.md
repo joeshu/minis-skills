@@ -1,30 +1,38 @@
 # session-context-compactor
 
-用于把当前长会话压缩成一份后续可继续执行的精简摘要，并在用户允许时删除历史会话，只保留必要文件与执行摘要。
+用途：把当前长会话整理成可继续执行的精简摘要；只有在用户明确要求时，才在摘要和必要文件保留后删除历史会话。
 
 ## 双模式
-- **模式 A：仅整理摘要**
-- **模式 B：整理摘要 + 删除历史会话**
+- **模式 A**：仅整理摘要
+- **模式 B**：整理摘要 + 删除历史会话
 
-## 核心规则
-- 先生成摘要，再删除历史会话
+## 默认原则
+- 先整理，再删除
 - 必要文件必须保留
 - 删除前必须确认
-- 若已有旧摘要，优先更新 latest，不重复制造摘要噪音
-- **跨会话默认优先写入 `/var/minis/shared/`**
-- 不要默认依赖 `/var/minis/workspace/` 作为新会话 handoff 入口
-- 删完后以后续共享摘要 + 文件继续执行
+- 跨会话默认写入 `/var/minis/shared/`
 
-## 推荐目录
-- `/var/minis/shared/session-handoffs/<topic>/`
-- `/var/minis/shared/<topic>/session-handoffs/`
-- `/var/minis/workspace/session-handoffs/<topic>/`（仅当前会话临时调试）
+## 输出结构
+- 当前目标
+- 关键约束
+- 已完成
+- 当前状态
+- 必要保留文件
+- 下一步
+- 风险 / 注意事项
 
-## 辅助脚本
-- `references/write_session_summary.sh`
-- `references/list_required_files.sh`
-- `references/build_handoff_template.sh`
-- `references/score_summary_quality.sh`
-- `references/rank_required_files.sh`
-- `references/write_versioned_summary.sh`
-- `references/write_versioned_handoff.sh`
+## 推荐路径
+- `/var/minis/shared/session-handoffs/<topic>/session-summary-latest.md`
+- `/var/minis/shared/session-handoffs/<topic>/handoff-latest.md`
+
+## 输出模板
+- 仅整理摘要：摘要 + 必要文件清单 + 下一步
+- 删除前确认：摘要已完成 + 必要文件已列出 + 等待确认
+- 跨会话交接：shared 路径 + 下次继续入口
+- 风险检查：是否存在信息丢失风险 + 下一步建议
+
+## 失败反例
+- 没生成摘要就删历史会话
+- 漏保留关键文件
+- 直接复制整段对话当摘要
+- 删除前不确认
