@@ -62,6 +62,7 @@
 - HTML 地图：`memory-system-skill-map.html`
 - 真实样本索引：`memory-system-execution-index.md`
 - 统一评分标准：`SKILL_SCORING_STANDARD.md`
+- 元技能总入口：`META_SKILLS_INDEX.md`
 
 ---
 

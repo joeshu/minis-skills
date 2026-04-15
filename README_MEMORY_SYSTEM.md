@@ -66,6 +66,10 @@
 - `SKILL_REVIEW_CHECKLIST.md`
 - 说明：正式评分、发布或封板前，先用这份清单做快速人工检查。
 
+### 8. 元技能总入口
+- `META_SKILLS_INDEX.md`
+- 说明：快速判断 bootstrapper / lifecycle manager / output governor / scoring / review checklist 之间该怎么配合。
+
 ---
 
 ## 四、推荐阅读顺序
