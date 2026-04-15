@@ -61,10 +61,18 @@
 - 技能地图：`memory-system-skill-map.md`
 - HTML 地图：`memory-system-skill-map.html`
 - 真实样本索引：`memory-system-execution-index.md`
+- 统一评分标准：`SKILL_SCORING_STANDARD.md`
 
 ---
 
-## 六、原则摘要
+## 六、评分与优化口径
+- 后续技能优化与评分，默认优先参考 `SKILL_SCORING_STANDARD.md`
+- `darwin-skill` 作为评分方法来源与优化参考，不要求所有技能机械套用同一正文模板
+- 报告中应明确标注：`full-test` / `full-test style` / `dry-run`
+
+---
+
+## 七、原则摘要
 - 先审查，再写入
 - 先分层，再落盘
 - 先审计，再清理
