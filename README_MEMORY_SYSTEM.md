@@ -58,6 +58,10 @@
 ### 5. 提交范围说明
 - `docs/memory-system/COMMIT-CHECKLIST.md`
 
+### 6. 统一评分标准
+- `SKILL_SCORING_STANDARD.md`
+- 说明：后续技能优化与评分，默认优先参考这份统一标准；达尔文技能作为方法来源。
+
 ---
 
 ## 四、推荐阅读顺序
