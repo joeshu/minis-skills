@@ -52,5 +52,23 @@
     "response_template": "mid_task_memory_routing",
     "expected_action": "prefer_daily_over_topic_for_temporary_change",
     "pass_criteria": ["识别临时变化", "不误写为长期专题规则", "优先建议 daily memory"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个专题记忆不够用了，你补查通用和近期规则后再继续。",
+    "intent": "topic_insufficient_fallback",
+    "risk_level": "medium",
+    "response_template": "full_orchestration",
+    "expected_action": "fallback_to_global_and_daily_then_continue",
+    "pass_criteria": ["识别专题不足", "补查 GLOBAL.md / daily memory", "再继续后续流程"]
+  },
+  {
+    "id": 8,
+    "prompt": "现在这个摘要还不够完整，先别删历史会话。",
+    "intent": "handoff_quality_guardrail",
+    "risk_level": "high",
+    "response_template": "delete_after_handoff",
+    "expected_action": "block_delete_until_handoff_complete",
+    "pass_criteria": ["识别 handoff 质量不足", "阻止删除", "先补摘要与必要文件"]
   }
 ]
