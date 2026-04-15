@@ -34,5 +34,11 @@
     "prompt": "这次只提交记忆系统相关文件，其他技能别混进来。",
     "expected_action": "scope_memory_system_only",
     "pass_criteria": ["限定提交范围", "不混入无关技能改动"]
+  },
+  {
+    "id": 7,
+    "prompt": "本地 skills 仓库还在，先帮我做增量恢复，不要整仓重装。",
+    "expected_action": "incremental_restore",
+    "pass_criteria": ["识别为增量恢复", "优先 pull 而不是 clone", "保留现有仓库工作副本"]
   }
 ]

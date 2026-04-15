@@ -67,6 +67,7 @@ compatibility: git, shell_execute, file_read, file_write
 - 恢复核心技能目录
 - 恢复 shared 镜像资产
 - 提示真实个人记忆数据需单独恢复
+- 支持全量恢复与增量恢复
 
 ## 同步范围
 ### 默认纳入同步
@@ -145,6 +146,7 @@ compatibility: git, shell_execute, file_read, file_write
 2. 如果用户想先刷新 shared 镜像：用 `sync`。
 3. 如果用户想一键发布：用 `push`。
 4. 如果用户重装后要恢复：用 `restore`。
+5. 如果本地仓库还在且只是想更新到最新版本，优先给增量恢复方案，不必默认全量重建。
 
 ### Phase 1: 范围确认
 - 只同步记忆系统相关目录与文档
@@ -167,10 +169,11 @@ compatibility: git, shell_execute, file_read, file_write
 
 ### Phase 5: 恢复
 恢复顺序：
-1. clone 仓库
-2. 恢复核心技能目录
-3. 恢复 shared 镜像资产
-4. 如有个人真实记忆备份，再恢复 `/var/minis/memory/`
+1. 若是新环境：clone 仓库
+2. 若本地仓库仍在：优先 `git pull origin master`
+3. 恢复核心技能目录
+4. 恢复 shared 镜像资产
+5. 如有个人真实记忆备份，再恢复 `/var/minis/memory/`
 
 ## 恢复模板
 ### 一键恢复模板
@@ -179,6 +182,13 @@ compatibility: git, shell_execute, file_read, file_write
 - 恢复 `docs/memory-system/*` 到 `/var/minis/shared/`
 - 恢复 `docs/memory-topics/*` 到 `/var/minis/shared/memory_topics/`
 - 最后人工恢复真实个人记忆数据
+
+### 增量恢复模板
+- 进入现有 `/var/minis/skills` 仓库
+- `git checkout master`
+- `git pull origin master`
+- 重新确认 `docs/memory-system/` 与 `docs/memory-topics/` 镜像文件齐全
+- 如有需要，再恢复个人真实记忆备份
 
 ### 恢复边界
 - git 恢复的是系统框架与镜像资产
@@ -189,7 +199,7 @@ compatibility: git, shell_execute, file_read, file_write
 - `check`：问题摘要 + 待同步列表 + 风险项
 - `sync`：已镜像文件 + 跳过项
 - `push`：提交摘要 + commit id + push 结果
-- `restore`：恢复顺序 + 命令模板 + 注意事项
+- `restore`：恢复顺序 + 命令模板 + 注意事项（包含全量恢复 / 增量恢复）
 
 ## 响应模板
 ### check 模板
@@ -211,6 +221,7 @@ compatibility: git, shell_execute, file_read, file_write
 - 只同步记忆系统相关内容
 - 不把敏感个人记忆误推进仓库
 - shared 镜像保持更新
+- 支持全量恢复与增量恢复
 - 恢复流程清晰且可执行
 - 记忆系统可以通过 git 快速恢复框架
 
@@ -240,3 +251,4 @@ compatibility: git, shell_execute, file_read, file_write
 4. restore 模式恢复顺序
 5. 敏感信息拦截
 6. 只提交记忆系统相关内容
+7. 增量恢复方案
