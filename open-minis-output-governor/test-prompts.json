@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "prompt": "先给我一句结论，细节不用落文件。",
+    "expected_action": "chat_only",
+    "pass_criteria": ["识别为聊天内短结论", "不额外落盘"]
+  },
+  {
+    "id": 2,
+    "prompt": "把这次分析整理成一个 Markdown 报告，我后面还要看。",
+    "expected_action": "write_markdown_report",
+    "pass_criteria": ["识别为可复盘文档", "优先 Markdown"]
+  },
+  {
+    "id": 3,
+    "prompt": "做一个可视化页面给我看。",
+    "expected_action": "write_html_page",
+    "pass_criteria": ["识别为交互/可视化输出", "优先 HTML"]
+  },
+  {
+    "id": 4,
+    "prompt": "这个结果下次新会话还要继续用，别只放聊天里。",
+    "expected_action": "write_shared_artifact",
+    "pass_criteria": ["识别为跨会话结果", "优先写 shared"]
+  },
+  {
+    "id": 5,
+    "prompt": "这个只是当前调试临时看一下，放 workspace 就行。",
+    "expected_action": "write_workspace_temp",
+    "pass_criteria": ["识别为临时文件", "优先写 workspace"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个图表我要直接预览，不用做成报告。",
+    "expected_action": "write_attachment_preview",
+    "pass_criteria": ["识别为附件/媒体结果", "优先 attachment"]
+  },
+  {
+    "id": 7,
+    "prompt": "聊天里给我一句总结，然后把完整结果落成文件给我。",
+    "expected_action": "chat_plus_file_link",
+    "pass_criteria": ["识别为聊天摘要 + 文件组合输出", "不只做单一路径输出"]
+  }
+]
