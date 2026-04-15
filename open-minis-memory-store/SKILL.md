@@ -224,6 +224,13 @@ description: 将某类事情或某个项目的分散记忆整理为一个唯一�
 
 ## 4️⃣ 实现约束（非常重要）
 
+### 与 memory-topic-router 的分工
+- `open-minis-memory-store` 负责：**整理、归并、去重、清理记忆内容本身**。
+- `memory-topic-router` 负责：**在任务执行前决定优先读取哪类记忆来源**。
+- 前者面向记忆治理；后者面向记忆检索顺序。
+- 如果任务是“把某主题旧记忆整理成一个主记忆”，优先用 `open-minis-memory-store`。
+- 如果任务是“先查这个项目/站点/工作流的长期规则”，优先用 `memory-topic-router`。
+
 ### 4.1 Minis 原生限制
 - `memory_write` 只能**追加写入**
 - `memory_get` 只能**检索**
