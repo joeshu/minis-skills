@@ -5,6 +5,12 @@
 ## 一、恢复目标
 本指南用于在**重装 Open Minis** 后，尽可能快速恢复当前这套记忆系统框架。
 
+## 仓库地址
+默认从以下仓库恢复：
+```sh
+git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-skills-import
+```
+
 恢复对象分为两类：
 
 ### B. 可直接从 git 恢复的系统资产

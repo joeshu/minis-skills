@@ -202,7 +202,7 @@ compatibility: git, shell_execute, file_read, file_write
 - `我已按安全范围完成记忆系统同步并推送。`
 
 ### restore 模板
-- `我已整理出重装后的最快恢复顺序，先恢复框架，再恢复个人真实记忆。`
+- `我已整理出重装后的最快恢复顺序，默认从 https://github.com/joeshu/minis-skills.git 恢复框架，再恢复个人真实记忆。`
 
 ### 风险模板
 - `检测到敏感或不应同步内容，建议先清理后再推送。`

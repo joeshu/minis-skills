@@ -9,6 +9,11 @@
 
 ## 一、clone 仓库
 
+默认仓库地址：
+```sh
+https://github.com/joeshu/minis-skills.git
+```
+
 ```sh
 git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-skills-import
 ```
