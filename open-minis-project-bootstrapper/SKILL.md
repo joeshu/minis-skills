@@ -162,8 +162,17 @@ compatibility: file_write, shell_execute, file_read
 ### 最小骨架模板
 - `我已按最小可维护原则生成骨架，没有加入无明确用途的空目录。`
 
+### 长期维护模板
+- `这是长期维护项目，我已保留 REPORT / execution-samples 等后续入口。`
+
 ### 下一步模板
 - `下一步建议先补 README / test-prompts / REPORT 中最关键的部分。`
+
+## 边界规则
+- 如果用户没有要求 docs，不要默认强塞 docs
+- 如果用户没有跨会话需求，不要默认生成过重的 handoff 结构
+- 如果只是试验性小项目，优先轻量骨架
+- 如果是系统项目，允许增加 handoff / topic memory stub / docs
 
 ## 风险与边界
 - 不要给所有项目都塞进完全相同的重型骨架

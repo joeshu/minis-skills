@@ -34,5 +34,17 @@
     "prompt": "给我起一个长期维护项目的骨架，后面要做回归测试和阶段报告。",
     "expected_action": "bootstrap_long_term_project_with_reports_and_samples",
     "pass_criteria": ["识别长期维护需求", "保留 REPORT 与 execution-samples 等长期维护入口"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个只是一个临时试验性小项目，别给我生成 docs、handoff 和一堆额外目录。",
+    "expected_action": "bootstrap_experimental_project_minimal",
+    "pass_criteria": ["识别试验性小项目", "优先极简骨架", "不误生成重结构"]
+  },
+  {
+    "id": 8,
+    "prompt": "这个系统项目后面一定会跨会话继续，所以 handoff 结构先给我准备好。",
+    "expected_action": "bootstrap_system_project_with_cross_session_handoff",
+    "pass_criteria": ["识别跨会话需求", "生成 handoff 相关结构", "不遗漏长期维护入口"]
   }
 ]
