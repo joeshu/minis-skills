@@ -66,6 +66,7 @@
 - 元技能总报告：`META_SKILLS_REPORT.md`
 - 元技能封板说明：`META_SKILLS_FREEZE_NOTE.md`
 - 元技能样本索引：`META_SKILLS_EXECUTION_INDEX.md`
+- 元技能恢复指南：`META_SKILLS_RESTORE_GUIDE.md`
 
 ---
 

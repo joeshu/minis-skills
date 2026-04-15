@@ -82,6 +82,10 @@
 - `META_SKILLS_EXECUTION_INDEX.md`
 - 说明：汇总元技能体系的 execution samples 入口，支撑维护态下的样本积累与回归。
 
+### 12. 元技能恢复指南
+- `META_SKILLS_RESTORE_GUIDE.md`
+- 说明：说明如何把元技能体系从 git 恢复回 Minis。
+
 ---
 
 ## 四、推荐阅读顺序
