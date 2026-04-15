@@ -10,6 +10,7 @@
 - 总评报告
 - 回归方案与回归日志
 - 真实专题样本索引
+- git 同步与恢复入口
 
 ---
 
@@ -23,6 +24,7 @@
 | `memory-dedup-auditor/` | 审计重复、冲突、过时、层级错误 |
 | `open-minis-memory-store/` | 归并、更新、清理旧记忆 |
 | `memory-system-maintainer/` | 总管整套记忆治理流程 |
+| `memory-system-git-sync/` | 同步、发布、恢复这套系统 |
 
 ---
 
@@ -30,6 +32,7 @@
 
 ### 1. 系统总览
 - `MEMORY_SYSTEM_README.md`
+- `MEMORY_SYSTEM_REPORT.md`
 - `docs/memory-system/memory-system-final-maturity-report.md`
 - `docs/memory-system/memory-system-index.html`
 
@@ -46,7 +49,13 @@
 - `docs/memory-system/memory-topics-index.md`
 - `docs/memory-system/memory-system-mixed-cases.md`
 
-### 4. 提交范围说明
+### 4. 同步与恢复
+- `SHARED_SYNC_POLICY.md`
+- `MEMORY_SYSTEM_RESTORE_GUIDE.md`
+- `MEMORY_SYSTEM_RESTORE_COMMANDS.md`
+- `memory-system-git-sync/`
+
+### 5. 提交范围说明
 - `docs/memory-system/COMMIT-CHECKLIST.md`
 
 ---
@@ -55,12 +64,14 @@
 
 ### 如果你第一次看这套系统
 1. `MEMORY_SYSTEM_README.md`
-2. `docs/memory-system/memory-system-index.html`
-3. `memory-system-usage-guide.md`
+2. `MEMORY_SYSTEM_REPORT.md`
+3. `docs/memory-system/memory-system-index.html`
+4. `memory-system-usage-guide.md`
 
 ### 如果你想直接用
 1. `memory-system-usage-guide.md`
 2. 对应技能目录中的 `README.md`
+3. 如需同步/恢复，再看 `memory-system-git-sync/` 与恢复指南
 
 ### 如果你想继续优化
 1. `docs/memory-system/memory-system-final-maturity-report.md`
@@ -73,19 +84,7 @@
 ## 五、当前系统成熟度
 当前记忆系统的系统级成熟度：
 
-# **99.1 / 100**
+# **99.2 / 100**
 
 定位：
-**接近生产级、具备真实回归支撑的记忆治理框架**。
-
----
-
-## 六、一句话总结
-如果你只记一句话：
-
-- **继续旧任务先查规则** → `memory-topic-router`
-- **写之前先审查** → `memory-write-gatekeeper`
-- **决定写哪层** → `memory-layer-governor`
-- **记忆乱了先体检** → `memory-dedup-auditor`
-- **体检后再归并** → `open-minis-memory-store`
-- **整套一起管** → `memory-system-maintainer`
+**接近生产级、具备真实回归与 git 发布/恢复能力的记忆治理框架。**
