@@ -79,12 +79,30 @@ compatibility: file_write, file_read, shell_execute, browser_use
 
 ### 决策树
 1. 先判断结果是一次性查看，还是后续还要继续用。
-2. 若只需一句结论：聊天内返回。
-3. 若是结构化复盘：优先 Markdown。
-4. 若是交互式展示或可视化：优先 HTML。
-5. 若是媒体内容：优先 attachment。
-6. 若需要跨会话长期保留：优先 shared。
-7. 若只是当前会话临时结果：优先 workspace。
+2. 先判断用户要的是“只看结论”还是“要可继续使用的产物”。
+3. 若只需一句结论：聊天内返回。
+4. 若是结构化复盘：优先 Markdown。
+5. 若是交互式展示或可视化：优先 HTML。
+6. 若是媒体内容：优先 attachment。
+7. 若需要跨会话长期保留：优先 shared。
+8. 若只是当前会话临时结果：优先 workspace。
+9. 若同时存在“聊天结论 + 可继续产物”需求：采用“聊天摘要 + 文件链接”组合。
+
+### 检查点
+#### Checkpoint A：是否必须落盘
+- 用户是否明确要求文件 / 页面 / 附件
+- 结果是否需要跨会话继续使用
+- 结果是否明显长于适合聊天直接阅读的范围
+
+#### Checkpoint B：展示形式是否匹配结果类型
+- 文本复盘是否更适合 Markdown
+- 可视化浏览是否更适合 HTML
+- 媒体预览是否更适合 attachment
+
+#### Checkpoint C：落盘位置是否匹配生命周期
+- 长期沉淀 / 分享 / 引用：shared
+- 当前调试 / 中间产物：workspace
+- 媒体直接预览：attachments
 
 ### 输出决策评分
 给结果按目标打分：
@@ -121,19 +139,17 @@ compatibility: file_write, file_read, shell_execute, browser_use
 - 默认先给一句聊天摘要
 - 如落盘，再附文件链接
 - 若用户只要文件，不必重复长聊天输出
+- 若结果将进入 shared，优先使用稳定命名，避免临时文件名污染长期目录
+- 若结果只是中间产物，避免误写 shared
 
-## 成功标准
-- 能正确区分“聊天结论”和“落盘结果”
-- 能正确区分 shared / workspace / attachments
-- 能根据结果类型选对 Markdown / HTML / 媒体
-- 能在需要时采用“聊天摘要 + 文件链接”组合
-- 不把所有结果一律塞进聊天或一律落文件
-
+## 边界规则
 - 不要把明明需要长期保留的结果只留在聊天里
 - 不要把临时调试文件都堆进 shared
 - 不要把纯文本长报告硬做成 HTML 页面
 - 不要在用户只要一句结论时强制生成复杂文件
 - 不要混淆“落盘位置”和“展示形式”
+- 不要因为能落盘就默认落盘；若聊天已足够，应优先简答
+- 不要把“共享位置”误当成“展示形式”
 
 ## 响应模板
 ### 聊天模板
@@ -154,15 +170,11 @@ compatibility: file_write, file_read, shell_execute, browser_use
 ### attachment 模板
 - `这类结果适合保存成附件，方便直接预览。`
 
-## 成功标准
-- 能正确区分“聊天结论”和“落盘结果”
-- 能正确区分 shared / workspace / attachments
-- 能根据结果类型选对 Markdown / HTML / 媒体
-- 不把所有结果一律塞进聊天或一律落文件
-
 ## 资源文件
 - `README.md`
 - `test-prompts.json`
+- `REPORT.md`
+- `execution-samples.md`
 
 ## 测试要求
 至少覆盖：
@@ -173,3 +185,5 @@ compatibility: file_write, file_read, shell_execute, browser_use
 5. workspace 临时文件
 6. attachment 媒体结果
 7. 聊天 + 文件链接组合输出
+8. 用户只要文件不要长聊天解释
+9. 用户只要临时中间产物、不要长期沉淀

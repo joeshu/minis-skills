@@ -40,5 +40,17 @@
     "prompt": "聊天里给我一句总结，然后把完整结果落成文件给我。",
     "expected_action": "chat_plus_file_link",
     "pass_criteria": ["识别为聊天摘要 + 文件组合输出", "不只做单一路径输出"]
+  },
+  {
+    "id": 8,
+    "prompt": "完整结果直接写成文件给我，不用在聊天里再解释很长。",
+    "expected_action": "file_first_minimal_chat",
+    "pass_criteria": ["识别为文件优先", "聊天只保留最小摘要", "不过度重复输出"]
+  },
+  {
+    "id": 9,
+    "prompt": "这是中间调试产物，别沉淀到 shared。",
+    "expected_action": "workspace_not_shared",
+    "pass_criteria": ["识别为中间产物", "避免误写 shared", "优先 workspace"]
   }
 ]
