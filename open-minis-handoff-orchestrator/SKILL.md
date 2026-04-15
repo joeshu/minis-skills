@@ -87,6 +87,19 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 - 输出执行摘要
 - 列出必要保留文件
 - 若跨会话继续：默认写到 `/var/minis/shared/`
+- 若 handoff 已写入 shared：应继续补一条 daily memory，记录 shared 目录、latest 入口与时间戳摘要文件名，保证后续新会话可先从记忆系统命中该入口
+
+### 交接入口写入规则
+当满足以下条件时，默认建议写一条 daily memory：
+- 本轮已生成跨会话 handoff
+- handoff 已写入 `/var/minis/shared/`
+- 该入口将直接影响后续新会话继续执行
+
+建议记录内容：
+- handoff 所在 shared 目录
+- latest 入口文件名
+- 时间戳摘要文件名
+- 下次继续时优先先读该 handoff
 
 ### Phase 4: 历史会话删除（可选）
 仅当用户明确要求时：
@@ -105,6 +118,7 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 - 不要把执行中出现的一次性临时变化直接写成专题长期规则
 - 不要在未生成摘要和保留文件前删除历史会话
 - 不要在已有明确专题记忆时，直接跳去 daily memory 检索
+- 不要只把 handoff 写入 shared 却不记录入口；若该 handoff 将直接用于后续新会话继续，应该补一条 daily memory 入口记录
 
 ## 失败回退策略
 ### 开始前阶段失败
@@ -118,6 +132,7 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 ### 结束后阶段失败
 - 无法完整识别必要文件：先输出人工确认清单，不直接继续删除历史会话
 - 摘要质量不足：先触发摘要补全，不直接把该版本当 handoff latest
+- 已写入 shared handoff，但未记录入口：补写 daily memory 入口后，才算跨会话连续性闭环完成
 
 ### 删除前阶段失败
 - 用户未明确确认：停止删除流程
@@ -137,7 +152,7 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 - `我已整理好摘要并列出必要文件；如果你确认，我再删除历史会话。`
 
 ### 完整闭环模板
-- `我会先查长期记忆，再在执行中按需沉淀新规则，最后生成 handoff 摘要，保证下次能继续。`
+- `我会先查长期记忆，再在执行中按需沉淀新规则，最后生成 handoff 摘要；如果 handoff 写入 shared，我还会补记入口到 daily memory，保证下次能继续。`
 
 ## 成功标准
 - 开始前查对记忆层级
