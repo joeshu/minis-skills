@@ -1,43 +1,72 @@
 # 文件备份技能
 
-用途：在你需要保留回滚点时创建备份；普通修改默认不强制备份。按达尔文评分标准，这个技能优先强调：触发条件、线性工作流、边界条件、检查点和测试样例。
+用途：在需要回滚点时创建备份；普通修改默认不强制备份。
 
-## 什么时候用
-- 你明确要求先备份
-- 删除文件/目录前
-- 批量替换前
-- 重构/迁移前
-- 关键配置修改前
-- 想恢复最近一次备份
-- 想清理旧备份
+## 使用感受目标
+- 不让用户额外学习评分模型
+- 不让用户多填参数
+- 不在低风险操作里频繁打断
+- 只在必要时建议备份或请求确认
 
-## 默认策略
-- 普通低风险修改：不强制备份
-- 关键节点：建议用 `smart`
-- 智能备份默认：600 秒窗口，保留最近 5 份
+## 默认行为
+- **低风险**：直接修改
+- **中风险**：简短建议先备份
+- **高风险**：简短说明风险并请求确认
 
-## 常用命令
-```sh
-/var/minis/skills/file-backup-skill/scripts/backup.sh smart /path/to/file
-/var/minis/skills/file-backup-skill/scripts/backup.sh file /path/to/file
-/var/minis/skills/file-backup-skill/scripts/backup.sh dir /path/to/dir
-/var/minis/skills/file-backup-skill/scripts/backup.sh latest /path/to/file
-/var/minis/skills/file-backup-skill/scripts/backup.sh restore-latest /path/to/file
-/var/minis/skills/file-backup-skill/scripts/backup.sh clean /path/to/file 5
-```
+## 对用户的默认输出
+- `这是普通小改，可直接修改。`
+- `建议先做一次智能备份，再继续修改。`
+- `这是高风险操作，建议先备份。是否继续？`
+
+## 响应模板
+### 低风险
+- 只给一句短结论
+- 不展开评分过程
+
+### 中风险
+- 给一句建议
+- 给一个推荐动作
+- 不强制确认
+
+### 高风险
+- 给一句风险结论
+- 给一个推荐动作
+- 追加确认问题
+
+### 失败
+- 先说明失败
+- 再给最直接的下一步建议
+
+技能内部会使用风险评分来决定动作，但默认不向用户展示完整评分过程。
+只有在用户追问、需要确认或结论不直观时，才展开说明原因。
+
+## 命令速查
+| 场景 | 命令 |
+|---|---|
+| 单文件智能备份 | `smart /path/to/file` |
+| 强制新建一份备份 | `file /path/to/file` |
+| 目录快照 | `dir /path/to/dir` |
+| 查最近备份 | `latest /path/to/file` |
+| 恢复最近备份 | `restore-latest /path/to/file` |
+| 清理旧备份 | `clean /path/to/file 5` |
+
+## 失败速查
+| 问题 | 建议 |
+|---|---|
+| `smart` 被跳过但仍需新建备份 | 改用 `file` |
+| `restore-latest` 找不到备份 | 先 `list` 检查路径 |
+| 无法自动推断恢复目标 | 显式传 `restore <备份路径> <目标路径>` |
+| 批量任务部分失败 | 先汇报失败项，再决定是否继续 |
+
+## 输出风格
+- 默认先给一句短结论
+- 低风险：直接结论，不展开
+- 中风险：建议动作，不强制确认
+- 高风险：结论 + 建议 + 确认
+- 只有用户追问或场景不直观时，才解释原因
 
 ## 检查点
-以下情况建议先确认：
 - 删除目录前
 - 批量替换多个关键文件前
 - 清理旧备份前
 - restore 会覆盖现有文件时
-
-## 恢复
-```sh
-# 恢复指定备份
-/var/minis/skills/file-backup-skill/scripts/backup.sh restore /path/to/a.txt.20260415_061500.bak
-
-# 恢复最近一次备份
-/var/minis/skills/file-backup-skill/scripts/backup.sh restore-latest /path/to/a.txt
-```
