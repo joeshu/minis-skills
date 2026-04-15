@@ -104,6 +104,14 @@ compatibility: file_read, shell/file tools, memory_get
 - 当前任务需要跨主题总原则
 - 当前任务涉及近期更新、路径变化、最新例外
 
+### 专题不足判定标准
+满足任一即可视为“专题不足”，需要补查 `GLOBAL.md` 或 daily memory：
+- 专题文件只覆盖背景，不覆盖当前执行规则
+- 专题文件没有当前任务所需的关键路径、约束或工作流
+- 专题规则与当前任务明显不完全匹配
+- 专题文件未记录近期变动，而当前任务明显依赖近期变化
+- 专题文件存在，但内容过旧或缺少当前主题下的稳定结论
+
 回退顺序：
 1. `GLOBAL.md`
 2. daily memory
@@ -118,6 +126,12 @@ compatibility: file_read, shell/file tools, memory_get
 - daily memory 用于近期变化与时间线增量
 - 方法论细则优先沉淀到对应方法论专题文件
 - 不把一次性临时变化直接写成专题长期规则
+
+### 更新去向规则
+- **稳定、可复用、主题内长期有效** → 更新专题文件
+- **跨主题共享的长期原则** → 更新 `GLOBAL.md`
+- **近期变化、临时偏好、路径调整、时间线增量** → 写入 daily memory
+- **当前用户提出新特例，但尚未验证是否长期有效** → 先写 daily memory，不急着升格为专题规则
 
 ## 专题优先命中规则
 以下任一成立，应优先查专题记忆：
@@ -151,13 +165,16 @@ compatibility: file_read, shell/file tools, memory_get
 - 结论：`当前规则更适合写入专题 / GLOBAL / daily 中的某一层。`
 - 动作：说明建议写入哪一层，以及为什么
 
-## 专题文件维护建议
-- 项目专题：优先按项目名、仓库名或稳定主题名命名
-- 站点/平台专题：优先按站点名或平台名命名
-- 工作流专题：优先按流程名命名
-- 方法论专题：优先按方法论主题命名
-- 同一主题尽量只保留一个主专题文件
-- 若某专题长期高频使用，应逐步把稳定规则沉淀到专题文件，而不是反复散落到 daily memory
+## 专题命名建议
+- 项目专题：`<project>.md` 或 `<project>-topic.md`
+- 平台专题：`github.md`、`xiaohongshu.md`、`bilibili.md`
+- 工作流专题：`github-sync.md`、`memory-maintenance.md`
+- 方法论专题：`skill-design.md`、`context-compaction.md`
+
+命名原则：
+- 尽量短、稳定、可预测
+- 同一主题避免多个近义文件并存
+- 若已有主专题文件，优先更新该文件，不重复新建变体
 
 ## 风险与反例
 - 不检查专题文件，直接去 daily memory，导致命中噪音

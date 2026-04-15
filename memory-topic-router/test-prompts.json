@@ -5,6 +5,7 @@
     "intent": "explicit_project_topic",
     "topic_type": "project",
     "expected_action": "read_topic_file_first",
+    "fallback_expected": false,
     "pass_criteria": ["识别项目命中专题", "优先检查 memory_topics 下对应文件", "不先查 daily memory"]
   },
   {
@@ -13,6 +14,7 @@
     "intent": "workflow_semantic_match",
     "topic_type": "workflow",
     "expected_action": "infer_topic_then_read_topic_file",
+    "fallback_expected": false,
     "pass_criteria": ["即使用户未直说专题名，也识别工作流关联", "优先考虑专题文件"]
   },
   {
@@ -21,6 +23,7 @@
     "intent": "no_topic_fallback",
     "topic_type": "none",
     "expected_action": "fallback_to_global_and_daily",
+    "fallback_expected": true,
     "pass_criteria": ["识别未命中专题", "回退到 GLOBAL.md / daily memory"]
   },
   {
@@ -29,6 +32,7 @@
     "intent": "methodology_topic",
     "topic_type": "methodology",
     "expected_action": "read_methodology_topic_file",
+    "fallback_expected": false,
     "pass_criteria": ["识别方法论主题", "优先查对应专题文件"]
   },
   {
@@ -37,6 +41,7 @@
     "intent": "current_user_overrides_topic",
     "topic_type": "contextual",
     "expected_action": "follow_current_instruction_and_optionally_update_memory",
+    "fallback_expected": false,
     "pass_criteria": ["当前用户要求优先", "不被旧专题规则绑死", "必要时建议更新专题或 daily memory"]
   },
   {
@@ -45,6 +50,25 @@
     "intent": "platform_topic_match",
     "topic_type": "platform",
     "expected_action": "read_platform_topic_file_first",
+    "fallback_expected": false,
     "pass_criteria": ["识别站点/平台主题", "优先查平台专题文件"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个专题文件只有背景介绍，没有当前执行规则，你继续补查其他记忆。",
+    "intent": "topic_insufficient_then_fallback",
+    "topic_type": "contextual",
+    "expected_action": "fallback_after_topic_insufficient",
+    "fallback_expected": true,
+    "pass_criteria": ["识别专题不足", "先专题后回退", "补查 GLOBAL.md 或 daily memory"]
+  },
+  {
+    "id": 8,
+    "prompt": "这个新规则只是最近一次临时变化，先别升格成专题长期规则。",
+    "intent": "daily_not_topic",
+    "topic_type": "methodology",
+    "expected_action": "prefer_daily_memory_for_recent_change",
+    "fallback_expected": false,
+    "pass_criteria": ["识别临时变化不应直接写入专题", "优先建议写 daily memory"]
   }
 ]
