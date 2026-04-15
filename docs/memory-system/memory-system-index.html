@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minis 记忆系统总入口</title>
+  <style>
+    :root{--bg:#0b1020;--panel:#121935;--panel2:#162247;--text:#eef3ff;--muted:#9fb0d0;--line:#243056;--accent:#7aa2ff;--accent2:#4de2c5;--gold:#ffd166}
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#0b1020,#0f1730);color:var(--text)}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 56px}
+    h1{font-size:34px;margin:0 0 8px} h2{font-size:24px;margin:30px 0 14px} h3{font-size:18px;margin:0 0 10px}
+    p,li{line-height:1.65}.muted{color:var(--muted)} a{color:var(--accent2);text-decoration:none}
+    .hero{display:grid;grid-template-columns:1.3fr .7fr;gap:16px}.card{background:rgba(18,25,53,.9);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+    .score{font-size:52px;font-weight:800;color:var(--gold);line-height:1}.sub{font-size:13px;color:var(--muted);margin-top:6px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.tag{display:inline-block;padding:4px 10px;border-radius:999px;background:#1d2a52;border:1px solid var(--line);color:#d8e4ff;font-size:12px;margin:0 6px 8px 0}
+    table{width:100%;border-collapse:collapse;background:rgba(18,25,53,.88);border:1px solid var(--line);border-radius:14px;overflow:hidden} th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top} th{background:var(--panel2);color:#dce7ff} tr:last-child td{border-bottom:none}
+    .links a{display:block;padding:10px 12px;border-radius:12px;background:#101a39;border:1px solid var(--line);margin-bottom:10px}
+    .flow{background:#0d1430;border:1px solid var(--line);border-radius:16px;padding:16px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card">
+        <h1>Minis 记忆系统总入口</h1>
+        <p class="muted">一个集中入口，汇总当前记忆系统的技能地图、使用手册、总评报告、回归报告、真实专题样本与回归日志。</p>
+        <div>
+          <span class="tag">读取路由</span>
+          <span class="tag">写入审查</span>
+          <span class="tag">写入分层</span>
+          <span class="tag">审计体检</span>
+          <span class="tag">旧记忆归并</span>
+          <span class="tag">总管编排</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="muted">系统成熟度</div>
+        <div class="score">99.1</div>
+        <div class="sub">接近生产级、具备真实回归支撑的记忆治理框架</div>
+      </div>
+    </section>
+
+    <h2>核心入口</h2>
+    <div class="grid links">
+      <a href="minis://shared/memory-system-final-maturity-report.md">最终成熟度报告</a>
+      <a href="minis://shared/memory-system-usage-guide.md">记忆系统使用手册</a>
+      <a href="minis://shared/memory-system-skill-map.md">记忆系统技能地图（Markdown）</a>
+      <a href="minis://shared/memory-system-skill-map.html">记忆系统技能地图（HTML）</a>
+      <a href="minis://skills/MEMORY_SYSTEM_README.md">记忆系统总 README</a>
+      <a href="minis://skills/MEMORY_SYSTEM_REPORT.md">记忆系统总评报告</a>
+      <a href="minis://shared/memory-system-regression-plan.md">回归测试方案</a>
+      <a href="minis://shared/memory-system-regression-report.md">回归阶段报告</a>
+      <a href="minis://shared/memory-system-regression-log.md">回归记录日志</a>
+      <a href="minis://skills/memory-system-execution-index.md">执行样本索引</a>
+      <a href="minis://shared/memory-topics-index.md">真实专题样本库索引</a>
+      <a href="minis://shared/memory-system-mixed-cases.md">混合污染案例库</a>
+    </div>
+
+    <h2>核心技能组</h2>
+    <table>
+      <thead><tr><th>技能</th><th>职责</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td><a href="minis://skills/memory-topic-router/SKILL.md">memory-topic-router</a></td><td>决定任务开始前先读哪类记忆</td><td>高分稳定</td></tr>
+        <tr><td><a href="minis://skills/memory-write-gatekeeper/SKILL.md">memory-write-gatekeeper</a></td><td>决定新信息该不该进入记忆系统</td><td>高分稳定</td></tr>
+        <tr><td><a href="minis://skills/memory-layer-governor/SKILL.md">memory-layer-governor</a></td><td>决定写到哪层：daily / topic / GLOBAL / none</td><td>高分稳定</td></tr>
+        <tr><td><a href="minis://skills/memory-dedup-auditor/SKILL.md">memory-dedup-auditor</a></td><td>审计重复、冲突、过时、层级错误</td><td>高分稳定</td></tr>
+        <tr><td><a href="minis://skills/open-minis-memory-store/SKILL.md">open-minis-memory-store</a></td><td>归并、更新、清理旧记忆</td><td>高分稳定</td></tr>
+        <tr><td><a href="minis://skills/memory-system-maintainer/SKILL.md">memory-system-maintainer</a></td><td>编排整套记忆治理流程</td><td>高分稳定</td></tr>
+      </tbody>
+    </table>
+
+    <h2>推荐调用顺序</h2>
+    <div class="flow">继续旧任务
+  → memory-topic-router
+
+新信息进入系统
+  → memory-write-gatekeeper
+  → memory-layer-governor
+  → 写入 daily / topic / GLOBAL
+
+某主题记忆变乱
+  → memory-dedup-auditor
+  → open-minis-memory-store
+
+整套系统治理
+  → memory-system-maintainer
+  → 编排上述全部技能</div>
+
+    <h2>当前能力边界</h2>
+    <div class="grid">
+      <div class="card"><h3>已经稳定覆盖</h3><ul><li>专题优先检索</li><li>写入前审查与拦截</li><li>写入分层</li><li>重复/冲突/过时/层级错误审计</li><li>旧记忆归并与保守删除</li><li>系统级编排</li></ul></div>
+      <div class="card"><h3>继续提升方向</h3><ul><li>更大规模真实专题样本库</li><li>更长时间跨度的回归样本</li><li>自动化回归</li></ul></div>
+    </div>
+  </div>
+</body>
+</html>
