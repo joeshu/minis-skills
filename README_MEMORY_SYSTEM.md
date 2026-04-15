@@ -78,6 +78,10 @@
 - `META_SKILLS_FREEZE_NOTE.md`
 - 说明：标记元技能体系已进入维护态/封板态，后续以样本、回归、边界修正为主。
 
+### 11. 元技能样本索引
+- `META_SKILLS_EXECUTION_INDEX.md`
+- 说明：汇总元技能体系的 execution samples 入口，支撑维护态下的样本积累与回归。
+
 ---
 
 ## 四、推荐阅读顺序
