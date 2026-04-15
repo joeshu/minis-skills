@@ -10,6 +10,7 @@
 - `open-minis-project-bootstrapper`
 - `open-minis-skill-lifecycle-manager`
 - `open-minis-output-governor`
+- `meta-skills-git-sync`
 - `SKILL_SCORING_STANDARD.md`
 - `SKILL_REVIEW_CHECKLIST.md`
 - `META_SKILLS_INDEX.md`
@@ -102,6 +103,9 @@ git checkout <commit>
 - `META_SKILLS_EXECUTION_INDEX.md`
 - `META_SKILLS_RESTORE_GUIDE.md`
 
+### 同步与恢复
+- `meta-skills-git-sync/SKILL.md`
+
 ### 方法来源
 - `darwin-skill/SKILL.md`
 
@@ -115,6 +119,7 @@ for f in \
   open-minis-project-bootstrapper/SKILL.md \
   open-minis-skill-lifecycle-manager/SKILL.md \
   open-minis-output-governor/SKILL.md \
+  meta-skills-git-sync/SKILL.md \
   SKILL_SCORING_STANDARD.md \
   SKILL_REVIEW_CHECKLIST.md \
   META_SKILLS_INDEX.md \

@@ -124,6 +124,7 @@ review checklist → scoring standard → lifecycle manager（maintenance/freeze
 | `open-minis-project-bootstrapper` | 99.4 |
 | `open-minis-skill-lifecycle-manager` | 99.4 |
 | `open-minis-output-governor` | 99.3 |
+| `meta-skills-git-sync` | 99.4 |
 | 记忆系统整体 | 99.2 |
 | `memory-system-git-sync` | 99.4 |
 

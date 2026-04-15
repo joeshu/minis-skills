@@ -73,7 +73,15 @@
 
 定位：总入口 / 总索引
 
-### 7. `darwin-skill`
+### 7. `meta-skills-git-sync`
+作用：
+- 安全同步元技能体系到 git
+- 支持 check / sync / push / restore
+- 支持一键恢复与增量恢复回 Minis
+
+当前成熟度：**99.4 / 100**
+
+### 8. `darwin-skill`
 作用：
 - 作为元优化方法来源与评分框架来源
 - 为高分优化提供方法论支撑
@@ -135,6 +143,13 @@
 2. 抽取高分优化逻辑
 3. 用仓库统一标准进行评分收口
 
+### Route F：同步或恢复元技能体系
+1. `meta-skills-git-sync`
+2. 先 `check` 看同步范围
+3. 需要时 `sync` 做增量同步准备
+4. `push` 做限定范围推送
+5. 或 `restore` 做一键恢复 / 增量恢复
+
 ---
 
 ## 六、当前成熟度判断
@@ -172,6 +187,7 @@
 - output governor：管结果路由
 - scoring standard：管正式评分
 - review checklist：管评分前快检
+- meta-skills-git-sync：管元技能体系同步与恢复
 - darwin-skill：管方法来源
 
 ### 3. 已具备维护态条件
