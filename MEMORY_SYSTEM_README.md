@@ -64,6 +64,7 @@
 - 统一评分标准：`SKILL_SCORING_STANDARD.md`
 - 元技能总入口：`META_SKILLS_INDEX.md`
 - 元技能总报告：`META_SKILLS_REPORT.md`
+- 元技能封板说明：`META_SKILLS_FREEZE_NOTE.md`
 
 ---
 
