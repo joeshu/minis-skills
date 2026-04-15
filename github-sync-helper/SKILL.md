@@ -246,6 +246,8 @@ sh /var/minis/skills/github-sync-helper/scripts/gh_sync.sh <command> [options]
 ## 资源文件
 - `README.md`：速查说明
 - `test-prompts.json`：评估样例
+- `execution-samples.md`：真实执行样本模板
+- `scripts/gh_sync.sh`：统一命令入口脚本
 
 ## 测试要求
 至少覆盖：
@@ -254,3 +256,4 @@ sh /var/minis/skills/github-sync-helper/scripts/gh_sync.sh <command> [options]
 3. 直推 main 的风险确认
 4. 只内容替换场景
 5. GitHub API 对象管理
+6. 脚本入口存在且可直接调用

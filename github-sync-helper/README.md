@@ -45,6 +45,11 @@ sh /var/minis/skills/github-sync-helper/scripts/gh_sync.sh push-main
 sh /var/minis/skills/github-sync-helper/scripts/gh_sync.sh pr --upstream <owner/repo> --head <owner:branch> --base main --title "..." --body "..."
 ```
 
+## 当前实现说明
+- `scripts/gh_sync.sh` 已作为统一脚本入口存在
+- 对 PR 创建场景，当前脚本默认给出手动 compare/API 路径提示
+- GitHub API 相关子命令依赖 `GITHUB_TOKEN`
+
 ## 失败速查
 - 不在 git 仓库：先 `clone` 或 `init`
 - push 认证失败：检查 `GITHUB_TOKEN`
