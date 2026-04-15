@@ -54,5 +54,26 @@
     "intent": "do_not_over_promote",
     "expected_action": "keep_at_project_or_public_level",
     "pass_criteria": ["识别尚未具备全局稳定性", "不误升格到 Minis 长期记忆"]
+  },
+  {
+    "id": 9,
+    "prompt": "这条只是我在测试 promote 回写有没有生效，别把它当正式经验。",
+    "intent": "testing_record_separation",
+    "expected_action": "route_to_testing_not_formal_learning",
+    "pass_criteria": ["识别为测试/验证记录", "不进入正式 learnings 主层", "不建议提升到公共区"]
+  },
+  {
+    "id": 10,
+    "prompt": "这个公共区条目其实只是 demo 项目里的联调记录，先别入公共区。",
+    "intent": "public_zone_guardrail",
+    "expected_action": "block_public_promotion_of_demo_record",
+    "pass_criteria": ["识别公共区误提升风险", "要求先清洗或重写为正式规则"]
+  },
+  {
+    "id": 11,
+    "prompt": "准备把 self-improving-agent 的数据层提交进仓库前，先帮我判断哪些需要清洗。",
+    "intent": "pre_commit_data_hygiene",
+    "expected_action": "require_cleaning_before_commit",
+    "pass_criteria": ["识别入库前清洗需求", "要求剔除测试记录", "必要时建议只提交脚本与规则文档"]
   }
 ]
