@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我起一个代码项目骨架，要有 README、报告、测试样例和执行样本。",
+    "expected_action": "bootstrap_code_project",
+    "pass_criteria": ["识别为代码项目", "生成代码项目所需基础骨架"]
+  },
+  {
+    "id": 2,
+    "prompt": "给我建一个新技能项目骨架。",
+    "expected_action": "bootstrap_skill_project",
+    "pass_criteria": ["识别为技能项目", "包含 SKILL.md/README/test-prompts 等核心文件"]
+  },
+  {
+    "id": 3,
+    "prompt": "这是个文档研究项目，别给我塞太重的结构。",
+    "expected_action": "bootstrap_docs_project_lightweight",
+    "pass_criteria": ["识别为文档/研究项目", "做轻量裁剪，不生成过多无用目录"]
+  },
+  {
+    "id": 4,
+    "prompt": "我要搭一个系统项目，后面还会做 handoff 和专题记忆。",
+    "expected_action": "bootstrap_system_project_with_handoff_and_topic_stub",
+    "pass_criteria": ["识别为系统项目", "包含 handoff / docs / topic memory stub"]
+  },
+  {
+    "id": 5,
+    "prompt": "只给我最小可维护骨架，不要一开始生成一堆空目录。",
+    "expected_action": "bootstrap_minimal_maintainable_structure",
+    "pass_criteria": ["识别为最小骨架需求", "不生成无明确用途的多余目录"]
+  },
+  {
+    "id": 6,
+    "prompt": "给我起一个长期维护项目的骨架，后面要做回归测试和阶段报告。",
+    "expected_action": "bootstrap_long_term_project_with_reports_and_samples",
+    "pass_criteria": ["识别长期维护需求", "保留 REPORT 与 execution-samples 等长期维护入口"]
+  }
+]
