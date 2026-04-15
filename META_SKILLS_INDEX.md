@@ -33,6 +33,7 @@
 | `open-minis-output-governor/` | 决定结果该聊天输出、落 Markdown、做 HTML、存 shared/workspace/attachments | 任务结果需要治理输出形式时 |
 | `SKILL_SCORING_STANDARD.md` | 统一 8 维评分标准 | 正式评分、横向比较、复评时 |
 | `SKILL_REVIEW_CHECKLIST.md` | 评分/发布/封板前的快速人工检查表 | 正式评分前先排明显缺口 |
+| `meta-skills-git-sync/` | 安全同步元技能体系到 git，并支持一键恢复回 Minis | 发布、迁移、重装恢复元技能体系时 |
 | `darwin-skill/` | 优化方法来源、评分框架来源 | 需要参考优化方法与打分框架时 |
 
 ---
@@ -67,6 +68,12 @@
 2. 提炼优化思路
 3. 用 `SKILL_SCORING_STANDARD.md` 统一评分口径
 
+### Route F：同步或恢复元技能体系
+1. `meta-skills-git-sync/`
+2. `check` 看同步范围
+3. `push` 做限定范围推送
+4. 或 `restore` 生成/执行一键恢复流程
+
 ---
 
 ## 四、怎么选
@@ -85,6 +92,9 @@
 
 ### 你在“打分前先排雷”
 用：`SKILL_REVIEW_CHECKLIST.md`
+
+### 你在“同步/恢复整套元技能体系”
+用：`meta-skills-git-sync/`
 
 ### 你在“想参考优化方法论”
 用：`darwin-skill/`
