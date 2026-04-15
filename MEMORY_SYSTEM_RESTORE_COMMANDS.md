@@ -14,6 +14,11 @@
 https://github.com/joeshu/minis-skills.git
 ```
 
+默认主分支：
+```text
+master
+```
+
 ```sh
 git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-skills-import
 ```

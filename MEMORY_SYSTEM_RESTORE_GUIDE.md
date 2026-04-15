@@ -11,6 +11,12 @@
 git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-skills-import
 ```
 
+## 默认主分支
+当前仓库默认主分支为：
+```text
+master
+```
+
 恢复对象分为两类：
 
 ### B. 可直接从 git 恢复的系统资产
