@@ -70,6 +70,10 @@
 - `META_SKILLS_INDEX.md`
 - 说明：快速判断 bootstrapper / lifecycle manager / output governor / scoring / review checklist 之间该怎么配合。
 
+### 9. 元技能总报告
+- `META_SKILLS_REPORT.md`
+- 说明：汇总整套元技能体系的目标、分工、成熟度与维护策略。
+
 ---
 
 ## 四、推荐阅读顺序
