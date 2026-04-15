@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我看看这个主题是不是记了很多重复内容。",
+    "expected_action": "audit_duplicates",
+    "pass_criteria": ["识别重复审计场景", "输出重复项清单", "不直接删除"]
+  },
+  {
+    "id": 2,
+    "prompt": "我怀疑这个项目的新旧规则冲突了，你审计一下。",
+    "expected_action": "audit_conflicts",
+    "pass_criteria": ["识别冲突审计场景", "输出冲突项", "建议先确认当前有效版本"]
+  },
+  {
+    "id": 3,
+    "prompt": "看看有没有只适用于旧路径的记忆还留着。",
+    "expected_action": "audit_outdated_entries",
+    "pass_criteria": ["识别过时审计场景", "输出过时项", "不误删当前有效规则"]
+  },
+  {
+    "id": 4,
+    "prompt": "我怀疑有些本该进专题的规则还散落在 daily 里。",
+    "expected_action": "audit_layer_misplacement",
+    "pass_criteria": ["识别层级错误场景", "指出升格/迁移建议"]
+  },
+  {
+    "id": 5,
+    "prompt": "先给我体检报告，不要直接帮我删记忆。",
+    "expected_action": "report_only_no_delete",
+    "pass_criteria": ["先审计后处理", "不直接执行删除或归并"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个主题里既有冲突又有重复，你先告诉我先处理哪类问题。",
+    "expected_action": "prioritize_conflicts_before_duplicates",
+    "pass_criteria": ["识别多类问题并给出优先级", "优先处理冲突"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个规则其实只是近期临时变化，却被写进全局了，你审计一下层级问题。",
+    "expected_action": "detect_global_overpromotion",
+    "pass_criteria": ["识别近期变化误升格", "建议降级到 daily 或更低层级"]
+  }
+]
