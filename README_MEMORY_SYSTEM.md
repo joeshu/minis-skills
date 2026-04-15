@@ -53,7 +53,7 @@
 - `SHARED_SYNC_POLICY.md`
 - `MEMORY_SYSTEM_RESTORE_GUIDE.md`
 - `MEMORY_SYSTEM_RESTORE_COMMANDS.md`
-- `memory-system-git-sync/`
+- `memory-system-git-sync/`（支持全量恢复与增量恢复）
 
 ### 5. 提交范围说明
 - `docs/memory-system/COMMIT-CHECKLIST.md`

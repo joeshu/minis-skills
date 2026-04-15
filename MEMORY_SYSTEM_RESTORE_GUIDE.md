@@ -57,13 +57,26 @@ master
 
 ## 三、重装后最快恢复顺序
 
-### Step 1：恢复技能仓库
+### Step 1：判断是全量恢复还是增量恢复
+- 如果是新环境或本地仓库已丢失：走全量恢复
+- 如果 `/var/minis/skills` 仓库还在：优先走增量恢复，不必默认整仓重建
+
+### Step 2：恢复技能仓库
+#### 方式 A：全量恢复
 在 Open Minis 新环境中：
 ```sh
 git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-skills-import
 ```
 
-### Step 2：恢复记忆系统相关技能
+#### 方式 B：增量恢复
+如果本地仓库还在：
+```sh
+cd /var/minis/skills
+git checkout master
+git pull origin master
+```
+
+### Step 3：恢复记忆系统相关技能
 将仓库中的相关目录复制到技能目录：
 - `memory-topic-router/`
 - `memory-write-gatekeeper/`

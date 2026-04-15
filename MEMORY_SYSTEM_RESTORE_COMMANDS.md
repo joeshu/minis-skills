@@ -7,7 +7,7 @@
 
 ---
 
-## 一、clone 仓库
+## 一、clone 仓库（全量恢复）
 
 默认仓库地址：
 ```sh
@@ -25,7 +25,22 @@ git clone https://github.com/joeshu/minis-skills.git /var/minis/workspace/minis-
 
 ---
 
-## 二、恢复技能目录
+## 二、增量恢复（已有仓库时优先）
+
+```sh
+cd /var/minis/skills
+git checkout master
+git pull origin master
+```
+
+适用：
+- 本地 `skills/` 仓库还在
+- 只需要更新到最新版本
+- 不想整仓重新 clone
+
+---
+
+## 三、恢复技能目录
 
 ```sh
 set -e

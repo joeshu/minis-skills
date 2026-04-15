@@ -45,7 +45,7 @@
 `memory-system-maintainer` → 编排以上全部技能
 
 ### 5. 发布恢复闭环
-`memory-system-git-sync` → check / sync / push / restore
+`memory-system-git-sync` → check / sync / push / restore（含增量恢复）
 
 ---
 
@@ -56,6 +56,7 @@
 - 多个技能已具备 full test 风格报告
 - 已有统一的执行样本模板体系
 - 记忆系统可安全推送到 git，并支持快速恢复
+- 本地仓库仍在时，可直接走增量恢复，不必默认整仓重建
 
 ---
 
