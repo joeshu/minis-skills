@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我记住这条新规则，但先判断它值不值得进长期记忆。",
+    "expected_action": "gatekeeper_then_layer_governor",
+    "pass_criteria": ["识别为写入治理", "先审查再分层"]
+  },
+  {
+    "id": 2,
+    "prompt": "继续这个项目，先按过去约定来，先帮我查对专题记忆。",
+    "expected_action": "topic_router_first",
+    "pass_criteria": ["识别为读取治理", "优先走专题记忆路由"]
+  },
+  {
+    "id": 3,
+    "prompt": "这个主题的记忆太乱了，你先体检一下，再决定怎么整理。",
+    "expected_action": "audit_then_store",
+    "pass_criteria": ["先审计", "不直接归并", "需要时再调用记忆归并"]
+  },
+  {
+    "id": 4,
+    "prompt": "我想把整个记忆系统整理顺一点，你按合适顺序帮我处理。",
+    "expected_action": "run_memory_system_maintenance_flow",
+    "pass_criteria": ["识别为全局维护问题", "给出组合治理顺序"]
+  },
+  {
+    "id": 5,
+    "prompt": "不要把写入审查、审计和归并混在一起，帮我分步处理。",
+    "expected_action": "separate_subskill_responsibilities",
+    "pass_criteria": ["识别多子技能边界", "明确分工，不混用"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个新规则先审查是否值得记，再决定写到哪层。",
+    "expected_action": "compose_gatekeeper_and_layer_governor",
+    "pass_criteria": ["识别复合写入治理问题", "给出 gatekeeper -> layer-governor 顺序"]
+  },
+  {
+    "id": 7,
+    "prompt": "先把重复和冲突查出来，确认后再归并旧记忆。",
+    "expected_action": "compose_auditor_then_store",
+    "pass_criteria": ["识别审计后归并闭环", "不跳过审计直接整理"]
+  }
+]
