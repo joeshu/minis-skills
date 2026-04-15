@@ -249,6 +249,13 @@ description: Compress the current long session into a short execution-ready summ
 - `test-prompts.json`：评估样例
 - `references/`：辅助脚本
 
+## 与 memory-topic-router 的分工
+- `session-context-compactor` 负责：**压缩当前会话、生成执行摘要、列必要文件、在确认后删除历史会话**。
+- `memory-topic-router` 负责：**在任务开始前决定优先读取哪类长期记忆**。
+- 前者面向当前会话整理；后者面向长期记忆检索顺序。
+- 如果任务是“当前对话太长，需要 handoff”，优先用 `session-context-compactor`。
+- 如果任务是“继续某个项目，先查这个主题过去的约定”，优先用 `memory-topic-router`。
+
 ## 测试要求
 至少覆盖：
 1. 仅整理摘要
