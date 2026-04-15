@@ -100,6 +100,11 @@ compactor → 文件清单 → 确认删除
 当前判断：
 **这套系统已接近生产级，适合继续通过真实案例与回归把边界磨到更稳。**
 
+### 系统文档层
+- `HANDOFF_SYSTEM_REPORT.md`
+- `HANDOFF_SYSTEM_EXECUTION_INDEX.md`
+- `HANDOFF_SYSTEM_FREEZE_NOTE.md`
+
 ---
 
 ## 七、一句话结论
