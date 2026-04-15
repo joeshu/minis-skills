@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "prompt": "继续处理 UnifiedVIP 项目，先按这个项目过去的约定来。",
+    "intent": "explicit_project_topic",
+    "topic_type": "project",
+    "expected_action": "read_topic_file_first",
+    "pass_criteria": ["识别项目命中专题", "优先检查 memory_topics 下对应文件", "不先查 daily memory"]
+  },
+  {
+    "id": 2,
+    "prompt": "帮我继续做 GitHub 仓库同步这套流程。",
+    "intent": "workflow_semantic_match",
+    "topic_type": "workflow",
+    "expected_action": "infer_topic_then_read_topic_file",
+    "pass_criteria": ["即使用户未直说专题名，也识别工作流关联", "优先考虑专题文件"]
+  },
+  {
+    "id": 3,
+    "prompt": "这个任务看起来没有明确专题，你按一般记忆规则查就行。",
+    "intent": "no_topic_fallback",
+    "topic_type": "none",
+    "expected_action": "fallback_to_global_and_daily",
+    "pass_criteria": ["识别未命中专题", "回退到 GLOBAL.md / daily memory"]
+  },
+  {
+    "id": 4,
+    "prompt": "这次是记忆系统维护，先看方法论相关的长期规则。",
+    "intent": "methodology_topic",
+    "topic_type": "methodology",
+    "expected_action": "read_methodology_topic_file",
+    "pass_criteria": ["识别方法论主题", "优先查对应专题文件"]
+  },
+  {
+    "id": 5,
+    "prompt": "虽然这个专题以前是这么做的，但这次按我现在说的来。",
+    "intent": "current_user_overrides_topic",
+    "topic_type": "contextual",
+    "expected_action": "follow_current_instruction_and_optionally_update_memory",
+    "pass_criteria": ["当前用户要求优先", "不被旧专题规则绑死", "必要时建议更新专题或 daily memory"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个任务和 GitHub 平台规则明显相关，你先看对应长期专题。",
+    "intent": "platform_topic_match",
+    "topic_type": "platform",
+    "expected_action": "read_platform_topic_file_first",
+    "pass_criteria": ["识别站点/平台主题", "优先查平台专题文件"]
+  }
+]
