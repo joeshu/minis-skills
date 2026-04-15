@@ -93,6 +93,10 @@ compatibility: git, shell_execute, file_read, file_write
 - `docs/memory-system/`
 - `docs/memory-topics/`
 
+#### D. 已脱敏 memory 镜像（可选）
+- `docs/memory-export-sanitized/`
+- 来源：`/var/minis/memory/` 的**脱敏副本**，不是原始真实记忆数据
+
 ### 默认排除
 - `/var/minis/memory/*.md` 真实个人记忆数据
 - 含敏感信息的 shared 运行态数据

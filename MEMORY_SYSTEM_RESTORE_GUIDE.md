@@ -7,12 +7,13 @@
 
 恢复对象分为两类：
 
-### A. 可直接从 git 恢复的系统资产
+### B. 可直接从 git 恢复的系统资产
 包括：
 - 核心记忆技能目录
 - 系统 README / 地图 / 手册 / 报告
 - 真实专题样本镜像（`docs/memory-topics/`）
 - 系统文档镜像（`docs/memory-system/`）
+- 脱敏后的 memory 镜像（`docs/memory-export-sanitized/`，仅用于参考，不替代真实记忆备份）
 
 ### B. 不应直接进 git 的运行态数据
 默认不随仓库恢复：
