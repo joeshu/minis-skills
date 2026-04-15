@@ -28,5 +28,17 @@
     "prompt": "这个技能已经发过版了，但最近发现边界有问题，怎么走最稳？",
     "expected_action": "route_published_skill_regression_fix_flow",
     "pass_criteria": ["识别为已发布回归修边界场景", "建议回归优先、再做小修、再决定是否发布"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个技能现在已经很稳定了，你帮我判断是不是该进入 freeze/维护态。",
+    "expected_action": "route_skill_to_freeze_decision",
+    "pass_criteria": ["识别为 freeze 判断场景", "先做冻结前检查", "不给出默认继续扩功能建议"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个技能已经发布过，但最近发现的问题不像小修，可能要回到冲高阶段，你帮我判断路线。",
+    "expected_action": "route_published_skill_back_to_optimization_or_maintenance",
+    "pass_criteria": ["识别已发布再治理场景", "区分维护修边界与重新冲高", "给出路线判断"]
   }
 ]

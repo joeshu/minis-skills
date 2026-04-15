@@ -136,11 +136,13 @@ compatibility: file_read, file_write, file_edit, shell_execute, memory_get, memo
 
 ## 决策树
 1. 先识别当前阶段。
-2. 先补最低骨架还是直接进入优化。
-3. 判断是否缺测试/样本/报告。
-4. 判断是继续冲分还是转维护态。
-5. 判断是否需要 git 发布。
-6. 如果用户目标是“冲 100 分”，优先补边界、测试样例、execution samples、REPORT，再做评分收口。
+2. 判断当前是“缺骨架”问题，还是“缺收口资产”问题。
+3. 先补最低骨架还是直接进入优化。
+4. 判断是否缺测试/样本/报告。
+5. 判断是继续冲分还是转维护态。
+6. 判断是否需要 git 发布。
+7. 如果用户目标是“冲 100 分”，优先补边界、测试样例、execution samples、REPORT，再做评分收口。
+8. 如果技能已经高分稳定，优先判断是否进入 maintenance / freeze，而不是默认继续扩功能。
 
 ## 生命周期检查点
 ### Checkpoint A：骨架完整性
@@ -164,6 +166,12 @@ compatibility: file_read, file_write, file_edit, shell_execute, memory_get, memo
 - 是否核心结构已稳定
 - 是否后续以边界修正为主
 - 是否已有 freeze 倾向
+
+### Checkpoint E：冻结前判断
+- 最近修改是否主要集中在边界修正而非结构重做
+- 是否已有较完整测试样例
+- 是否已有 execution samples 模板与 REPORT 支撑
+- 是否再继续扩写的收益已明显下降
 
 ## 缺失资产检查表
 按优先级检查：
@@ -221,6 +229,9 @@ Bootstrap → Draft → Optimization → Evaluation → Publish
 ### Route E：封板/冻结
 确认稳定 → 写明维护态原则 → 后续仅做小修与回归
 
+### Route F：已发布技能再治理
+发现新问题 → 判断是边界修正 / 结构问题 / 资产缺失 → 走 D 或回到 C
+
 ## 成功标准
 - 能准确判断技能所处生命周期阶段
 - 能给出当前最该做的动作顺序
@@ -242,3 +253,5 @@ Bootstrap → Draft → Optimization → Evaluation → Publish
 3. 可用技能冲高分
 4. 已高分技能转维护态
 5. 已发布技能做回归修边界
+6. 技能已稳定，判断是否适合 freeze
+7. 已发布技能发现问题后，判断走维护修边界还是回到高分冲刺
