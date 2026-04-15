@@ -19,7 +19,7 @@ compatibility: git, shell_execute, file_read, file_write
 - 重装后恢复元技能体系
 
 ## 输入
-- 操作模式：`check` / `push` / `restore`
+- 操作模式：`check` / `sync` / `push` / `restore`
 - 可选：是否只处理元技能体系相关内容
 - 可选：是否生成恢复命令模板
 - 可选：是否输出最小检查结果
@@ -47,14 +47,21 @@ compatibility: git, shell_execute, file_read, file_write
 - 看哪些文件会被同步
 - 看是否混入无关改动
 
-### Mode B：push
+### Mode B：sync
+执行增量同步准备，但不 push。
+适用：
+- 只刷新元技能体系相关文件范围
+- 先做限定 add / status 检查
+- 先人工确认再 push
+
+### Mode C：push
 完整执行：
 - 检查
 - 只 add 元技能体系相关文件
 - commit
 - push
 
-### Mode C：restore
+### Mode D：restore
 生成或执行恢复流程：
 - clone 仓库
 - checkout `master`
@@ -104,8 +111,9 @@ compatibility: git, shell_execute, file_read, file_write
 
 ### 决策树
 1. 如果用户只是想看同步范围：用 `check`。
-2. 如果用户想安全推送元技能体系：用 `push`。
-3. 如果用户重装后要恢复：用 `restore`。
+2. 如果用户想先做增量同步准备但不推送：用 `sync`。
+3. 如果用户想安全推送元技能体系：用 `push`。
+4. 如果用户重装后要恢复：用 `restore`。
 
 ### Phase 1: 范围确认
 - 只处理元技能体系相关目录与文档
@@ -116,12 +124,17 @@ compatibility: git, shell_execute, file_read, file_write
 - 标记排除项
 - 输出风险项
 
-### Phase 3: 提交与推送
+### Phase 3: 增量同步准备
+- 只针对元技能体系相关文件做 `git status -- <scope>` 检查
+- 必要时刷新已修改的元技能文档/索引
+- 不 push，仅输出本次限定范围
+
+### Phase 4: 提交与推送
 - 只 add 元技能体系相关文件
 - 生成或使用明确提交信息
 - push 到远端 `master`
 
-### Phase 4: 恢复
+### Phase 5: 恢复
 恢复顺序：
 1. `cd /var/minis`
 2. 若需要全量恢复：删除旧 `skills/`
@@ -146,6 +159,25 @@ git checkout master
 git pull origin master
 ```
 
+### 增量同步（不推送）
+```sh
+cd /var/minis/skills
+git checkout master
+git status -- \
+  open-minis-project-bootstrapper \
+  open-minis-skill-lifecycle-manager \
+  open-minis-output-governor \
+  meta-skills-git-sync \
+  darwin-skill \
+  SKILL_SCORING_STANDARD.md \
+  SKILL_REVIEW_CHECKLIST.md \
+  META_SKILLS_INDEX.md \
+  META_SKILLS_REPORT.md \
+  META_SKILLS_FREEZE_NOTE.md \
+  META_SKILLS_EXECUTION_INDEX.md \
+  META_SKILLS_RESTORE_GUIDE.md
+```
+
 ### 最小检查
 ```sh
 cd /var/minis/skills && \
@@ -166,12 +198,16 @@ for f in \
 
 ## 输出风格
 - `check`：待同步范围 + 排除项 + 风险摘要
+- `sync`：限定范围 + 当前变更摘要 + 未推送说明
 - `push`：提交摘要 + commit id + push 结果
 - `restore`：恢复顺序 + 命令模板 + 最小检查项
 
 ## 响应模板
 ### check 模板
 - `我已检查元技能体系同步范围，以下内容可安全同步，以下内容应排除。`
+
+### sync 模板
+- `我已整理好元技能体系的增量同步范围，本次先不推送。`
 
 ### push 模板
 - `我已按限定范围完成元技能体系同步并推送。`
@@ -185,6 +221,7 @@ for f in \
 ## 成功标准
 - 只同步元技能体系相关内容
 - 不混入无关技能改动
+- 支持增量同步准备与增量恢复
 - 恢复流程清晰且可执行
 - 能通过 git 快速恢复整套元技能框架
 
@@ -208,7 +245,9 @@ for f in \
 ## 测试要求
 至少覆盖：
 1. check 模式预检
-2. push 模式限定范围推送
-3. restore 模式一键恢复
-4. 无关改动拦截
-5. 最小检查输出
+2. sync 模式限定范围增量同步
+3. push 模式限定范围推送
+4. restore 模式一键恢复
+5. 无关改动拦截
+6. 最小检查输出
+7. 增量恢复方案

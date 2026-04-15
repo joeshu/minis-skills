@@ -4,6 +4,7 @@
 
 ## 模式
 - `check`：只检查同步范围和风险
+- `sync`：做增量同步准备，但先不推送
 - `push`：限定范围提交并推送
 - `restore`：输出一键恢复顺序与命令模板
 
@@ -16,3 +17,4 @@
 - 元技能体系本身是 git-first 资产
 - 全量恢复：clone 仓库到 `/var/minis/skills`
 - 增量恢复：在现有仓库里 `git pull origin master`
+- 增量同步：先检查限定范围，再决定是否 push

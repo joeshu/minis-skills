@@ -7,26 +7,38 @@
   },
   {
     "id": 2,
+    "prompt": "先把这套元技能体系的增量同步范围整理好，但先别 push。",
+    "expected_action": "sync_only",
+    "pass_criteria": ["识别为 sync 模式", "限定范围输出当前变更", "明确本次不推送"]
+  },
+  {
+    "id": 3,
     "prompt": "把这套元技能体系安全推到 git，但别把其他无关技能一起带上。",
     "expected_action": "scoped_push",
     "pass_criteria": ["识别为 push 模式", "限定提交范围", "完成提交和推送"]
   },
   {
-    "id": 3,
+    "id": 4,
     "prompt": "我重装后怎么一键恢复这套元技能体系，你给我最快方案。",
     "expected_action": "restore_plan",
     "pass_criteria": ["识别为 restore 模式", "给出 clone/pull 两种恢复方案", "给出最小检查命令"]
   },
   {
-    "id": 4,
+    "id": 5,
     "prompt": "如果检测到别的无关技能改动或者 .bak 文件，你先别乱推。",
     "expected_action": "block_or_warn_on_unrelated_changes",
     "pass_criteria": ["识别无关改动与临时文件风险", "提醒限定范围后再推送"]
   },
   {
-    "id": 5,
+    "id": 6,
     "prompt": "恢复完后，顺手帮我检查元技能主栈是不是都在。",
     "expected_action": "post_restore_minimal_check",
     "pass_criteria": ["输出最小检查范围", "覆盖主技能、规范层、元文档层"]
+  },
+  {
+    "id": 7,
+    "prompt": "本地 skills 还在，先帮我做增量恢复，不要整仓重装。",
+    "expected_action": "incremental_restore",
+    "pass_criteria": ["识别为增量恢复", "优先 pull 而不是 clone", "保留现有仓库工作副本"]
   }
 ]
