@@ -46,5 +46,11 @@
     "prompt": "这个系统项目后面一定会跨会话继续，所以 handoff 结构先给我准备好。",
     "expected_action": "bootstrap_system_project_with_cross_session_handoff",
     "pass_criteria": ["识别跨会话需求", "生成 handoff 相关结构", "不遗漏长期维护入口"]
+  },
+  {
+    "id": 9,
+    "prompt": "先给我一个最小项目骨架，文件越少越好，但后面还能继续补。",
+    "expected_action": "bootstrap_smallest_extendable_structure",
+    "pass_criteria": ["识别为极简但可扩展需求", "保留核心入口", "避免重型目录"]
   }
 ]

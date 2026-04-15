@@ -76,7 +76,24 @@ compatibility: file_write, shell_execute, file_read
 2. 判断用户是要最小骨架，还是完整骨架。
 3. 决定是否需要 docs、test-prompts、execution-samples、handoff。
 4. 决定是否需要 topic memory stub。
-5. 生成最小可维护骨架。
+5. 判断这是试验性项目、长期维护项目，还是跨会话系统项目。
+6. 生成最小可维护骨架。
+
+### 检查点
+#### Checkpoint A：最小骨架是否完整
+- 是否至少保留 README / REPORT 这类核心入口
+- 若是技能项目，是否补上 `SKILL.md`
+- 若需要后续验证，是否补上 `test-prompts.json`
+
+#### Checkpoint B：结构是否过重
+- 用户是否明确要求最小骨架
+- 这个项目是否只是临时/试验用途
+- 当前是否真的需要 docs / handoff / topic stub
+
+#### Checkpoint C：长期维护入口是否到位
+- 是否需要 REPORT
+- 是否需要 execution-samples
+- 是否存在跨会话 handoff 需求
 
 ### 骨架评分原则
 给候选目录/文件按必要性打分：
@@ -192,7 +209,7 @@ compatibility: file_write, shell_execute, file_read
 - `README.md`
 - `test-prompts.json`
 - `REPORT.md`
-- `execution-samples.md`（可选）
+- `execution-samples.md`
 
 ## 测试要求
 至少覆盖：
@@ -202,3 +219,6 @@ compatibility: file_write, shell_execute, file_read
 4. 系统项目骨架
 5. 含 topic memory stub 的情况
 6. 最小骨架需求
+7. 试验性极简项目
+8. 跨会话 handoff 项目
+9. 用户只要文件少、不要重型结构的情况

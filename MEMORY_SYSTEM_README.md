@@ -67,6 +67,7 @@
 
 ## 六、评分与优化口径
 - 后续技能优化与评分，默认优先参考 `SKILL_SCORING_STANDARD.md`
+- 正式评分、发布或封板前，建议先过一遍 `SKILL_REVIEW_CHECKLIST.md`
 - `darwin-skill` 作为评分方法来源与优化参考，不要求所有技能机械套用同一正文模板
 - 报告中应明确标注：`full-test` / `full-test style` / `dry-run`
 
