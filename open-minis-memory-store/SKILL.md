@@ -31,7 +31,8 @@ description: Consolidate scattered memory entries for a topic into one master me
 
 ## 核心原则
 - **先查全量，再归并**
-- **先备份，再删除**
+- **只有在用户明确允许且可安全定位时才清理旧记忆**
+- **执行破坏性清理前先备份相关 memory 文件**
 - **默认保留一个主记忆**
 - **宁可少删，也不要误删**
 - **不确定时先更新主记忆，不直接删旧块**

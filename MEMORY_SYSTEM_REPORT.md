@@ -5,15 +5,18 @@
 ## 一、总评结论
 当前 Minis 记忆系统技能组已达到：
 
-# **99.3 / 100**
+# **98.9 / 100**
 
-定位：**生产级的记忆治理与发布恢复框架**。
+定位：**接近封板的生产级记忆治理与发布恢复框架**。
 
-这套系统不仅具备内容治理能力，还已经补齐：
-- 发布层（git sync，含增量恢复）
-- 恢复层（restore workflow）
-- shared 镜像层
-- 交接入口写入 daily memory 的连续性闭环修正
+这套系统已经建立了：
+- 内容治理主链
+- 发布与恢复层
+- shared / docs / sanitized 镜像层
+- 跨会话连续性入口记录链路
+
+但需要注意：当前高分主要建立在**完整结构、真实样本、人工回归与镜像资产完整**之上，
+还不是自动化系统回归意义上的“完全闭环”。
 
 ---
 
@@ -21,14 +24,15 @@
 
 | 技能 | 作用 | 当前分数 |
 |---|---|---:|
-| `memory-topic-router` | 先读哪类记忆 | 98.7 |
-| `memory-layer-governor` | 写到哪层 | 98.3 |
-| `memory-write-gatekeeper` | 该不该写 | 98.9 |
-| `memory-dedup-auditor` | 审计重复/冲突/过时/层级错误 | 98.2 |
-| `open-minis-memory-store` | 归并、更新、清理旧记忆 | 97.1 |
-| `memory-system-maintainer` | 总管整套记忆治理 | 98.9 |
-| `memory-system-git-sync` | 记忆系统发布、同步、恢复 | 99.4 |
-| `open-minis-handoff-orchestrator` | 跨会话连续性编排（已补交接入口入 daily memory） | 99.0 |
+| `memory-topic-router` | 先读哪类记忆 | 98.5 |
+| `memory-layer-governor` | 在已通过写入审查前提下，决定写到哪层 | 98.1 |
+| `memory-write-gatekeeper` | 该不该写 | 98.8 |
+| `memory-dedup-auditor` | 输出重复/冲突/过时/层级错误的候选问题清单 | 98.0 |
+| `open-minis-memory-store` | 在用户允许且可安全定位时归并、更新、清理旧记忆 | 97.1 |
+| `memory-system-maintainer` | 作为编排器维护整套记忆治理流程 | 98.6 |
+| `memory-system-git-sync` | 记忆系统发布、同步、恢复 | 99.2 |
+| `open-minis-handoff-orchestrator` | 跨会话连续性编排 | 98.3 |
+| `session-context-compactor` | 当前会话压缩与 handoff 护栏 | 98.5 |
 
 ---
 
@@ -41,10 +45,10 @@
 `memory-topic-router` → 专题优先 → 必要时回退 `GLOBAL.md` / daily
 
 ### 3. 清理闭环
-`memory-dedup-auditor` → `open-minis-memory-store`
+`memory-dedup-auditor` → 用户确认 → `open-minis-memory-store`
 
 ### 4. 总管闭环
-`memory-system-maintainer` → 编排以上全部技能
+`memory-system-maintainer` → 编排以上子技能，但不替代它们自身判断
 
 ### 5. 发布恢复闭环
 `memory-system-git-sync` → check / sync / push / restore（含增量恢复）
@@ -67,14 +71,15 @@
 ---
 
 ## 五、当前系统短板
-目前离系统级更高自动化的差距主要在：
+目前限制系统级更高评分的关键因素主要在：
 1. 真实样本库仍然不够厚
 2. 自动化回归尚未建立
 3. 真实个人记忆数据仍需独立备份，不能由 git 全恢复
+4. 部分高分结论仍主要依赖 `full-test style` 与人工回归，而非自动双跑
 
 ---
 
 ## 六、一句话总结
 这套系统已经不仅是记忆治理框架，而是：
 
-**一套具备治理、回归、发布、恢复、跨会话连续性入口记录能力的生产级记忆系统。**
+**一套核心治理闭环已建立、发布恢复层完整、样本与回归已成型，但自动化验证与长期样本厚度仍有提升空间的记忆系统。**

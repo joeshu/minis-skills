@@ -35,7 +35,7 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 - 目标：避免一开始就读错记忆层级
 
 ### 阶段 B：任务执行中
-- 如出现新的长期规则、稳定流程、重要偏好，再决定是否用 `open-minis-memory-store` 或 daily memory 处理
+- 仅当执行中真的出现新的稳定规则、重要偏好、或需要保留的近期变化时，才触发记忆沉淀判断
 - 目标：避免边做边把临时变化乱写进长期记忆
 
 ### 阶段 C：任务结束后
@@ -75,7 +75,7 @@ compatibility: memory-topic-router, session-context-compactor, open-minis-memory
 - 主题内长期稳定规则 → 专题记忆
 - 跨主题通用长期原则 → `GLOBAL.md`
 - 近期变化 / 临时例外 / 路径调整 → daily memory
-- 若同主题已有多条零散长期记忆 → 交给 `open-minis-memory-store` 归并
+- 若同主题已有多条零散长期记忆，且用户明确要求整理，再交给 `open-minis-memory-store` 归并
 
 ### 记忆沉淀判断规则
 - 如果信息只在当前一轮执行有效：不要升格为长期记忆

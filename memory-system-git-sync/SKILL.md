@@ -33,6 +33,7 @@ compatibility: git, shell_execute, file_read, file_write
 
 ## 核心原则
 - **只同步记忆系统相关内容**
+- **本技能负责发布/恢复层，不负责记忆内容本身是否合理**
 - **shared 采用镜像进仓库，不直接把运行态 shared 当仓库目录**
 - **默认排除敏感记忆与高频运行态噪音**
 - **推送前先检查，再同步，再提交，再推送**
@@ -166,6 +167,7 @@ compatibility: git, shell_execute, file_read, file_write
 - 只 add 记忆系统相关文件
 - 生成或使用明确提交信息
 - push 到远端
+- 若检测到无关改动、敏感内容、未刷新镜像或待确认风险项：停止在 check/sync 阶段，不进入 push
 
 ### Phase 5: 恢复
 恢复顺序：

@@ -103,10 +103,6 @@
 
 ---
 
-## 七、边界提醒
-- `memory-topic-router` 是**读之前的路由器**，不是整理器。
-- `memory-write-gatekeeper` 是**写之前的门卫**，不是分层器。
-- `memory-layer-governor` 是**分层决策器**，不是审计器。
-- `memory-dedup-auditor` 是**体检器**，默认不直接删除。
-- `open-minis-memory-store` 是**整理器**，不是先验审计器。
-- `memory-system-maintainer` 是**总管**，不是替代所有子技能的单体技能。
+
+## 八、补充入口
+- 子系统职责矩阵：`docs/memory-system/memory-subsystems-responsibility-matrix.md`

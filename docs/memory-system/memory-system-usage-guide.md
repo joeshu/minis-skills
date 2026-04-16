@@ -58,11 +58,7 @@
 
 ---
 
-## 四、一句话总结
-- 继续旧任务先查规则 → `memory-topic-router`
-- 写之前先审查 → `memory-write-gatekeeper`
-- 决定写哪层 → `memory-layer-governor`
-- 记忆乱了先体检 → `memory-dedup-auditor`
-- 体检后再归并 → `open-minis-memory-store`
-- 整套一起管 → `memory-system-maintainer`
-- 发布与恢复 → `memory-system-git-sync`
+## 五、补充入口
+- 如果你想快速看清各子技能负责什么、不负责什么、哪些动作必须先确认，优先读：
+  - `docs/memory-system/memory-subsystems-responsibility-matrix.md`
+

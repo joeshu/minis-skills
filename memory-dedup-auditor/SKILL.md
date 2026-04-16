@@ -37,6 +37,7 @@ compatibility: memory_get, file_read, open-minis-memory-store, memory-layer-gove
 
 ## 核心原则
 - **先审计，再整理**
+- **输出的是“候选问题清单”，不是未经核实的最终真相**
 - **不直接删除，先出报告**
 - **发现问题后再决定是否交给其他技能处理**
 - **宁可少删，也不要误删**

@@ -65,6 +65,7 @@ compatibility: memory-topic-router, open-minis-memory-store, file_read, memory_w
 
 ## 决策原则
 - **先判断值不值得记**
+- **本技能默认建立在“已通过写入审查”之上；若连是否该写都不明确，应回退给 `memory-write-gatekeeper`**
 - **先判断稳定性，再判断作用范围**
 - **近期变化优先 daily，不急着升格**
 - **主题内稳定规则优先进专题**

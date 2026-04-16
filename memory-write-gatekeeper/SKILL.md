@@ -37,6 +37,7 @@ compatibility: memory-layer-governor, memory-topic-router, open-minis-memory-sto
 
 ## 核心原则
 - **先判断要不要写，再判断写到哪**
+- **本技能只决定“建议写 / 不建议写 / 需确认”，不直接决定具体层级**
 - **宁可少写，也不要污染长期记忆**
 - **涉及敏感或高影响规则时先确认**
 - **发现冲突时优先更新旧规则，不盲目新增**

@@ -35,6 +35,7 @@ compatibility: memory-write-gatekeeper, memory-layer-governor, memory-topic-rout
 
 ## 核心原则
 - **先判断问题类型，再调用对应子技能**
+- **本技能负责编排，不替代各子技能本身的判断职责**
 - **不要把所有记忆问题都用一个技能解决**
 - **先审查，再写入；先审计，再清理**
 - **专题优先于通用记忆；长期规则优先于临时变更的升格**
@@ -111,8 +112,8 @@ compatibility: memory-write-gatekeeper, memory-layer-governor, memory-topic-rout
 典型组合：
 - **写入闭环**：gatekeeper -> layer-governor -> 实际写入
 - **读取闭环**：topic-router -> 需要时补查 GLOBAL / daily
-- **清理闭环**：dedup-auditor -> memory-store
-- **系统维护闭环**：dedup-auditor -> gatekeeper/layer review -> memory-store
+- **清理闭环**：dedup-auditor -> 用户确认 -> memory-store
+- **系统维护闭环**：先定位问题类型，再分发给对应子技能；只有用户明确要求全局维护时才串多技能
 
 ### 组合治理模板
 #### 新规则进入系统

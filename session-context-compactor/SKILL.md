@@ -52,6 +52,7 @@ description: Compress the current long session into a short execution-ready summ
 - **删除前必须确认**
 - **跨会话默认优先写入 `/var/minis/shared/`**
 - **摘要必须足够支撑后续继续执行**
+- **本技能只负责压缩与交接，不负责决定长期记忆写入层级**
 
 ## 工作流
 
@@ -178,6 +179,10 @@ description: Compress the current long session into a short execution-ready summ
 - 保留摘要文件
 - 保留必要文件
 - 后续从“摘要 + 文件”继续
+
+注意：
+- 若摘要质量自检未通过，不进入删除阶段
+- 若必要文件仍需人工确认，不进入删除阶段
 
 ## 风险分级
 ### L1：低风险
