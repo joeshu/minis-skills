@@ -12,6 +12,9 @@ API_KEY_B64=$(python3 -c 'import os,base64; print(base64.b64encode(os.environ["A
 # 1) stop old processes first
 sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "$HOST" 'printf "== stop old processes ==\n"; pkill -f "/root/opencode2api-enhanced/index.js" || true; pkill -f "node index.js" || true; pkill -f "opencode serve --hostname 127.0.0.1 --port 10001" || true'
 
+# 1.5) ensure 10000 is really free before starting new proxy
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "$HOST" 'printf "\n== ensure 10000 is free ==\n"; ss -lntp | grep ":10000 " || true'
+
 # 2) pull latest code
 sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "$HOST" 'printf "\n== git pull ==\n"; git config --global --add safe.directory /root/opencode2api-enhanced || true; chown -R root:root /root/opencode2api-enhanced || true; cd /root/opencode2api-enhanced; git pull --ff-only'
 

@@ -246,6 +246,17 @@ pkill -f "opencode serve --hostname 127.0.0.1 --port 10001" || true
 '
 ```
 
+**重要：停旧进程后必须确认 `10000` 端口已空，再启动新代理。否则很容易出现“磁盘代码已更新，但对外仍是旧进程”的假部署。**
+
+检查方式：
+```sh
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new root@118.190.200.12 '
+ss -lntp | grep ":10000 " || true
+'
+```
+
+若仍有旧 PID 占用 `10000`，先明确杀掉该 PID，再继续启动新代理。
+
 再启动后端 + 代理：
 ```sh
 sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new root@118.190.200.12 '
