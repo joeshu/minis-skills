@@ -1,0 +1,22 @@
+[
+  {
+    "name": "check mounted repo",
+    "input": "请检查这套回答风格体系能否安全同步到 minis-skills 仓库，不要真正推送。"
+  },
+  {
+    "name": "sync mirror with global",
+    "input": "请把当前 memory_topics 体系和 GLOBAL.md 镜像到 minis-skills 仓库里的单独目录，但先不要 push。"
+  },
+  {
+    "name": "safe push with global",
+    "input": "请按最稳妥方式一键上传这套体系和 GLOBAL.md 到 joeshu/minis-skills.git 的单独文件夹。"
+  },
+  {
+    "name": "restore check",
+    "input": "请检查从 minis-skills 仓库恢复这套体系到本机会覆盖哪些文件，但先不要真正恢复。"
+  },
+  {
+    "name": "restore sync",
+    "input": "请从 minis-skills 仓库把这套体系和 GLOBAL.md 恢复到本机，先备份再覆盖。"
+  }
+]
