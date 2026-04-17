@@ -96,27 +96,47 @@
 - 职责：把任务类型映射到默认读取路径。
 - 特点：回答“先读什么、后读什么”。
 
-### 7. 负触发层
+### 7. 执行优先层
+- 文件：`ExecutionPriorityMatrix.md`
+- 职责：定义哪些任务默认先执行、先判断、先产物。
+- 特点：让系统更贴近 OpenMinis 的执行型工作方式。
+
+### 8. 结果落点层
+- 文件：`ResultPlacementPolicy.md`
+- 职责：定义结果应落在 chat、workspace、shared、attachments、memory 还是 Git。
+- 特点：回答“做完后放哪里”。
+
+### 9. 工具预算层
+- 文件：`ToolInvocationBudget.md`
+- 职责：为不同任务给出低成本、低噪音的默认工具路径。
+- 特点：回答“用什么工具最合适、最省成本”。
+
+### 10. 文件系统语义层
+- 文件：`OpenMinisFilesystemSemantics.md`
+- 职责：定义 OpenMinis 路径系统的生命周期语义。
+- 特点：回答“这些路径在系统里各自扮演什么角色”。
+
+### 11. 负触发层
 - 文件：`NegativeTriggers.md`
 - 职责：规定哪些场景不要触发额外读取。
 - 特点：控制体系不过度工作。
 
-### 8. 验收层
+### 12. 验收层
 - 文件：`OutputAcceptanceChecklist.md`
 - 职责：检查输出是否达标。
 - 特点：将偏好转成可验收标准。
 
-### 9. 反例层
+### 13. 反例层
 - 文件：`FailurePatterns.md`
 - 职责：记录常见失配模式与纠偏方式。
 - 特点：帮助发现体系失效点。
 
-### 10. 元数据层
+### 14. 元数据层
 - 文件：`TopicMetadataSchema.md`
 - 职责：统一专题文件头部 metadata 规范。
 - 特点：提升可调度性与可维护性。
 
-### 11. 预算层
+### 15. 预算层
 - 文件：`AnswerScopeBudget.md`
 - 职责：控制回答、读取、搜索、分析的扩展范围。
 - 特点：回答“什么时候该停”。

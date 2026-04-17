@@ -17,9 +17,13 @@
 - `RulePriorityAndConflictResolution.md`：规则优先级、冲突裁决顺序、常见冲突场景处理。
 - `TaskRoutingMatrix.md`：任务类型到专题读取路径的路由矩阵。
 - `NegativeTriggers.md`：不应触发专题读取的场景与降噪规则。
+- `AnswerScopeBudget.md`：回答、读取、搜索、分析分支的预算与停止条件。
+- `ExecutionPriorityMatrix.md`：OpenMinis 中先执行、先判断、先产物的优先矩阵。
+- `ResultPlacementPolicy.md`：chat / workspace / shared / memory / Git 的结果落点策略。
+- `ToolInvocationBudget.md`：不同任务下的低成本默认工具路径与调用预算。
+- `OpenMinisFilesystemSemantics.md`：OpenMinis 路径系统的语义角色与生命周期划分。
 - `OutputAcceptanceChecklist.md`：输出是否合格的验收清单。
 - `FailurePatterns.md`：常见失败模式、反例与纠偏口径。
-- `AnswerScopeBudget.md`：回答、读取、搜索、分析分支的预算与停止条件。
 - `TopicMetadataSchema.md`：专题文件统一元数据头规范与字段解释。
 - `RegressionCases.md`：真实样本回归与 baseline / governed 对照入口。
 - `RuleChangeAdmission.md`：规则新增、升格与拒绝进入系统的准入口径。
