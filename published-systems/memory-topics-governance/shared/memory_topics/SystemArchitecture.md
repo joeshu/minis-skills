@@ -17,6 +17,53 @@
 - 用一份总览文件说明这套体系的层次结构、职责边界、调用顺序与最小执行链。
 - 降低后续维护成本，避免每次都分散读取多个规则文件才知道整体结构。
 
+## 体系压缩结构图
+
+```text
+回答风格与检索治理系统
+│
+├─ 1. 全局默认层
+│   └─ GLOBAL.md
+│      - 长期稳定默认偏好
+│      - 没有更具体规则时生效
+│
+├─ 2. 规则导航层
+│   └─ TopicIndex.md
+│      - 体系级规则文件导航
+│      - 告诉系统有哪些核心文件
+│
+├─ 3. 系统总览层
+│   └─ SystemArchitecture.md
+│      - 说明整套体系怎么分层
+│      - 说明最小执行链与裁决关系
+│
+├─ 4. 专题规则层
+│   ├─ ResponseStyle-AGENTS.md
+│   ├─ ResponseStyle-HighDensity.md
+│   ├─ ResponseModePrefixes.md
+│   ├─ RulePriorityAndConflictResolution.md
+│   ├─ TaskRoutingMatrix.md
+│   ├─ NegativeTriggers.md
+│   ├─ AnswerScopeBudget.md
+│   └─ TopicMetadataSchema.md
+│
+├─ 5. 质量控制层
+│   ├─ OutputAcceptanceChecklist.md
+│   ├─ FailurePatterns.md
+│   └─ LightweightScoringFramework.md
+│
+├─ 6. 科学化维护层
+│   ├─ RegressionCases.md
+│   ├─ RuleChangeAdmission.md
+│   ├─ DeprecationAndMergePolicy.md
+│   └─ PrimaryVsDerivedDefinitions.md
+│
+└─ 7. 汇总说明层
+    └─ global_memory_style_and_retrieval_rules.md
+       - 汇总说明
+       - 不是主定义层
+```
+
 ## 体系分层
 
 ### 1. 全局基线层
@@ -101,12 +148,34 @@
 - 任务专题 > 一般风格专题
 - 新近明确更新的专题 > 旧专题
 
+## 主定义与派生职责
+- `ResponseStyle-HighDensity.md`：高信息密度、结论先行、低冗余的主定义。
+- `ResponseStyle-AGENTS.md`：中文表达、语气、句法与技术完整性的主定义。
+- `AnswerScopeBudget.md`：篇幅、停止条件、读取/搜索/分析预算的主定义。
+- `NegativeTriggers.md`：不触发读取与降噪场景的主定义。
+- `RulePriorityAndConflictResolution.md`：冲突裁决顺序的主定义。
+- `TaskRoutingMatrix.md`：任务类型到读取路径的主定义。
+- `OutputAcceptanceChecklist.md`：输出验收入口；负责检查，不承担上述约束的主定义职责。
+- `FailurePatterns.md`：反例与纠偏入口；负责归类，不承担上述约束的主定义职责。
+
 ## 设计原则
 - 默认追求最短可用闭环。
 - 不为形式读取全部专题文件。
 - 不为完整感扩写。
 - 输出风格服从任务目标。
 - 简洁不能损害正确性与可执行性。
+- 在 OpenMinis 中，可执行任务默认优先执行闭环，而非解释闭环。
+- 工具调用与文件落点应服从最短可用闭环原则：能直接执行则先执行，能稳定落文件则不只停留在聊天输出。
+
+## 维护闭环
+- 问题出现 → `FailurePatterns.md` 归类
+- 归类后 → 写入或补充 `RegressionCases.md`
+- 若样本反复出现，先判断是否需要规则升格
+- 需要升格时 → 进入 `RuleChangeAdmission.md` 做准入判断
+- 准入通过后 → 优先修改对应主定义文件
+- 修改后 → 用 `OutputAcceptanceChecklist.md` 验收
+- 验收通过后 → 可用 `LightweightScoringFramework.md` 做版本比较
+- 若后续长期无样本支撑、或已被更高层文件吸收 → 进入 `DeprecationAndMergePolicy.md`
 
 ## 维护建议
 - 新增专题时，优先补 metadata 头。

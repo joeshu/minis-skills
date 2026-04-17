@@ -101,5 +101,7 @@
 
 ## 与其他规则的关系
 - 本文件与 `/var/minis/shared/memory_topics/ResponseStyle-AGENTS.md` 配合使用。
+- 高信息密度、结论先行、低冗余的主定义在本文件。
+- 篇幅、停止条件、分支控制以 `/var/minis/shared/memory_topics/AnswerScopeBudget.md` 为主定义。
 - 若两者同时命中，优先执行高信息密度、低冗余、结论先行。
 - 若与系统规则或用户当前明确要求冲突，以更高优先级规则为准。

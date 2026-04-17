@@ -58,4 +58,8 @@
 ## 合格判定
 - 一票否决项全部通过
 - 核心验收项无明显失真
+- 验收围绕风格主定义、预算主定义与技术完整性主定义展开：
+  - 高信息密度 / 结论先行主定义：`ResponseStyle-HighDensity.md`
+  - 篇幅 / 停止条件主定义：`AnswerScopeBudget.md`
+  - 技术完整性主定义：`ResponseStyle-AGENTS.md`
 - 若有取舍冲突，优先保技术正确性、用户当前要求、最短可用闭环

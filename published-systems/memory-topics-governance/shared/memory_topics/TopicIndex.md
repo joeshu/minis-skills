@@ -21,3 +21,8 @@
 - `FailurePatterns.md`：常见失败模式、反例与纠偏口径。
 - `AnswerScopeBudget.md`：回答、读取、搜索、分析分支的预算与停止条件。
 - `TopicMetadataSchema.md`：专题文件统一元数据头规范与字段解释。
+- `RegressionCases.md`：真实样本回归与 baseline / governed 对照入口。
+- `RuleChangeAdmission.md`：规则新增、升格与拒绝进入系统的准入口径。
+- `DeprecationAndMergePolicy.md`：文件废弃、合并、下沉与删除策略。
+- `LightweightScoringFramework.md`：半量化轻量评分框架，用于版本对比与回归评估。
+- `PrimaryVsDerivedDefinitions.md`：主定义与派生定义关系梳理，用于降低重复维护与规则漂移。

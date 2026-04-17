@@ -91,3 +91,4 @@
 - 能用当前上下文解决的问题，不追加读取。
 - 已明确任务类型时，不先读 `TopicIndex.md`。
 - 只有主题不明确时，才通过 `TopicIndex.md` 选专题。
+- 不触发条件以 `/var/minis/shared/memory_topics/NegativeTriggers.md` 为主定义；本文件只定义“该读什么”，不承担“不该读什么”的主定义职责。
