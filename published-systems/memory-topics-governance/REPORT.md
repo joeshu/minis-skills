@@ -2,6 +2,7 @@
 
 ## Scope
 - Mirrors the current response-style / retrieval-governance system from Minis shared memory topics.
+- Includes `GLOBAL.md` by default.
 - Keeps the publish set isolated under a dedicated repository folder.
 
 ## Safety
