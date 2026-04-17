@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "prompt": "继续处理 UnifiedVIP 项目，先按这个项目过去的约定来。",
+    "intent": "explicit_project_topic",
+    "topic_type": "project",
+    "expected_action": "read_topic_file_first",
+    "fallback_expected": false,
+    "pass_criteria": ["识别项目命中专题", "优先检查 memory_topics 下对应文件", "不先查 daily memory"]
+  },
+  {
+    "id": 2,
+    "prompt": "帮我继续做 GitHub 仓库同步这套流程。",
+    "intent": "workflow_semantic_match",
+    "topic_type": "workflow",
+    "expected_action": "infer_topic_then_read_topic_file",
+    "fallback_expected": false,
+    "pass_criteria": ["即使用户未直说专题名，也识别工作流关联", "优先考虑专题文件"]
+  },
+  {
+    "id": 3,
+    "prompt": "这个任务看起来没有明确专题，你按一般记忆规则查就行。",
+    "intent": "no_topic_fallback",
+    "topic_type": "none",
+    "expected_action": "fallback_to_global_and_daily",
+    "fallback_expected": true,
+    "pass_criteria": ["识别未命中专题", "回退到 GLOBAL.md / daily memory"]
+  },
+  {
+    "id": 4,
+    "prompt": "这次是记忆系统维护，先看方法论相关的长期规则。",
+    "intent": "methodology_topic",
+    "topic_type": "methodology",
+    "expected_action": "read_methodology_topic_file",
+    "fallback_expected": false,
+    "pass_criteria": ["识别方法论主题", "优先查对应专题文件"]
+  },
+  {
+    "id": 5,
+    "prompt": "虽然这个专题以前是这么做的，但这次按我现在说的来。",
+    "intent": "current_user_overrides_topic",
+    "topic_type": "contextual",
+    "expected_action": "follow_current_instruction_and_optionally_update_memory",
+    "fallback_expected": false,
+    "pass_criteria": ["当前用户要求优先", "不被旧专题规则绑死", "必要时建议更新专题或 daily memory"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个任务和 GitHub 平台规则明显相关，你先看对应长期专题。",
+    "intent": "platform_topic_match",
+    "topic_type": "platform",
+    "expected_action": "read_platform_topic_file_first",
+    "fallback_expected": false,
+    "pass_criteria": ["识别站点/平台主题", "优先查平台专题文件"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个专题文件只有背景介绍，没有当前执行规则，你继续补查其他记忆。",
+    "intent": "topic_insufficient_then_fallback",
+    "topic_type": "contextual",
+    "expected_action": "fallback_after_topic_insufficient",
+    "fallback_expected": true,
+    "pass_criteria": ["识别专题不足", "先专题后回退", "补查 GLOBAL.md 或 daily memory"]
+  },
+  {
+    "id": 8,
+    "prompt": "这个新规则只是最近一次临时变化，先别升格成专题长期规则。",
+    "intent": "daily_not_topic",
+    "topic_type": "methodology",
+    "expected_action": "prefer_daily_memory_for_recent_change",
+    "fallback_expected": false,
+    "pass_criteria": ["识别临时变化不应直接写入专题", "优先建议写 daily memory"]
+  },
+  {
+    "id": 9,
+    "prompt": "这里同时像项目专题也像 GitHub 工作流专题，你先读最具体的那个。",
+    "intent": "multiple_topic_candidates",
+    "topic_type": "project+workflow",
+    "expected_action": "pick_most_specific_topic_first",
+    "fallback_expected": false,
+    "pass_criteria": ["识别多候选专题", "优先最具体专题", "必要时再补读上层专题"]
+  },
+  {
+    "id": 10,
+    "prompt": "这个规则是跨项目长期通用原则，不要写到某个专题文件里。",
+    "intent": "global_not_topic",
+    "topic_type": "global",
+    "expected_action": "prefer_global_md_for_cross_topic_rule",
+    "fallback_expected": false,
+    "pass_criteria": ["识别跨主题原则", "优先建议写入 GLOBAL.md", "不误写成专题规则"]
+  }
+]

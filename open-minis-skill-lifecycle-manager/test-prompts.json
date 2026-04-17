@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我从零开始做一个新技能，并告诉我每一步该补什么。",
+    "expected_action": "route_new_skill_bootstrap_flow",
+    "pass_criteria": ["识别为新建阶段", "先补最小骨架", "给出生命周期顺序"]
+  },
+  {
+    "id": 2,
+    "prompt": "这个技能现在只有 SKILL.md，后面怎么补到可发布？",
+    "expected_action": "route_partial_skill_to_publishable_state",
+    "pass_criteria": ["识别缺 README 与 tests 等资产", "给出补齐顺序"]
+  },
+  {
+    "id": 3,
+    "prompt": "这个 skill 已经能用了，帮我冲高分并收口。",
+    "expected_action": "route_usable_skill_to_high_score_optimization",
+    "pass_criteria": ["识别为冲高阶段", "建议边界补强、测试扩展、报告收口"]
+  },
+  {
+    "id": 4,
+    "prompt": "这个技能已经高分稳定了，接下来应该怎么维护？",
+    "expected_action": "route_high_score_skill_to_maintenance_mode",
+    "pass_criteria": ["识别为维护态", "不默认建议大改", "以回归和边界修正为主"]
+  },
+  {
+    "id": 5,
+    "prompt": "这个技能已经发过版了，但最近发现边界有问题，怎么走最稳？",
+    "expected_action": "route_published_skill_regression_fix_flow",
+    "pass_criteria": ["识别为已发布回归修边界场景", "建议回归优先、再做小修、再决定是否发布"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个技能现在已经很稳定了，你帮我判断是不是该进入 freeze/维护态。",
+    "expected_action": "route_skill_to_freeze_decision",
+    "pass_criteria": ["识别为 freeze 判断场景", "先做冻结前检查", "不给出默认继续扩功能建议"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个技能已经发布过，但最近发现的问题不像小修，可能要回到冲高阶段，你帮我判断路线。",
+    "expected_action": "route_published_skill_back_to_optimization_or_maintenance",
+    "pass_criteria": ["识别已发布再治理场景", "区分维护修边界与重新冲高", "给出路线判断"]
+  }
+]

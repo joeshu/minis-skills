@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "prompt": "这个命令失败了，而且问题挺隐蔽，帮我记一下以后别再踩。",
+    "intent": "log_error_learning",
+    "expected_action": "record_error_or_learning",
+    "pass_criteria": ["识别为值得记录", "默认写技能区", "类别判断正确"]
+  },
+  {
+    "id": 2,
+    "prompt": "你刚才理解错了，我纠正你一下，这条以后记住。",
+    "intent": "user_correction",
+    "expected_action": "record_learning_correction",
+    "pass_criteria": ["识别为用户纠正", "写入 learning", "默认不直接升格长期记忆"]
+  },
+  {
+    "id": 3,
+    "prompt": "这只是一次普通闲聊，不用记。",
+    "intent": "noise_filter",
+    "expected_action": "do_not_record",
+    "pass_criteria": ["识别为不值得记录", "明确过滤噪音"]
+  },
+  {
+    "id": 4,
+    "prompt": "这个经验已经在多个项目里反复出现了，应该变成公共规则。",
+    "intent": "promote_to_public",
+    "expected_action": "promote_to_public_zone",
+    "pass_criteria": ["识别跨项目复用", "建议提升到公共区"]
+  },
+  {
+    "id": 5,
+    "prompt": "这个规则以后所有任务都适用，帮我作为长期规则记住。",
+    "intent": "promote_to_memory",
+    "expected_action": "consider_memory_write",
+    "pass_criteria": ["识别为长期稳定规则", "建议提升到 Minis 长期记忆"]
+  },
+  {
+    "id": 6,
+    "prompt": "这是这个项目特有的问题，记到项目自己的 learnings 里。",
+    "intent": "project_specific_learning",
+    "expected_action": "write_project_level_learning",
+    "pass_criteria": ["识别为项目级问题", "建议写项目级 .learnings"]
+  },
+  {
+    "id": 7,
+    "prompt": "这个坑我已经连续遇到三次了，你别新建重复条目，按复发问题处理。",
+    "intent": "recurring_issue_update",
+    "expected_action": "update_existing_learning_instead_of_duplicate",
+    "pass_criteria": ["识别为复发问题", "优先更新已有条目", "不重复新增噪音"]
+  },
+  {
+    "id": 8,
+    "prompt": "这条经验现在还只在这个项目里成立，先别升格成全局长期规则。",
+    "intent": "do_not_over_promote",
+    "expected_action": "keep_at_project_or_public_level",
+    "pass_criteria": ["识别尚未具备全局稳定性", "不误升格到 Minis 长期记忆"]
+  },
+  {
+    "id": 9,
+    "prompt": "这条只是我在测试 promote 回写有没有生效，别把它当正式经验。",
+    "intent": "testing_record_separation",
+    "expected_action": "route_to_testing_not_formal_learning",
+    "pass_criteria": ["识别为测试/验证记录", "不进入正式 learnings 主层", "不建议提升到公共区"]
+  },
+  {
+    "id": 10,
+    "prompt": "这个公共区条目其实只是 demo 项目里的联调记录，先别入公共区。",
+    "intent": "public_zone_guardrail",
+    "expected_action": "block_public_promotion_of_demo_record",
+    "pass_criteria": ["识别公共区误提升风险", "要求先清洗或重写为正式规则"]
+  },
+  {
+    "id": 11,
+    "prompt": "准备把 self-improving-agent 的数据层提交进仓库前，先帮我判断哪些需要清洗。",
+    "intent": "pre_commit_data_hygiene",
+    "expected_action": "require_cleaning_before_commit",
+    "pass_criteria": ["识别入库前清洗需求", "要求剔除测试记录", "必要时建议只提交脚本与规则文档"]
+  }
+]

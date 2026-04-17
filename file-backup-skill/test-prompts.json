@@ -1,18 +1,113 @@
 [
   {
     "id": 1,
-    "prompt": "帮我备份 /var/minis/workspace/test.txt 文件，使用时间戳命名",
-    "expected": "应该创建一个带时间戳的备份文件，显示备份成功信息"
+    "prompt": "普通小改这个文件，不需要备份，直接改。",
+    "expected_action": "no_backup",
+    "need_confirmation": false,
+    "risk_level": "low",
+    "risk_score_range": "0-2",
+    "decision_reason": "普通小改 + 可轻易重建",
+    "user_facing_style": "short_conclusion_only",
+    "pass_criteria": ["不要求先备份", "允许直接修改", "默认不给冗长解释"],
+    "expected": "不应强制执行备份，应允许直接修改。"
   },
   {
     "id": 2,
-    "prompt": "我要修改一个重要配置文件，请先做好备份，然后告诉我备份策略",
-    "important": true,
-    "expected": "应该询问确认备份策略，创建备份，并说明可回退机制"
+    "prompt": "我要删掉这个目录，先帮我保留一个回滚点。",
+    "expected_action": "dir",
+    "need_confirmation": true,
+    "risk_level": "high",
+    "risk_score_range": "6+",
+    "decision_reason": "删除目录 + 用户要求回滚点 + 操作不可逆",
+    "user_facing_style": "short_conclusion_then_confirm",
+    "pass_criteria": ["识别为高风险", "选择 dir", "删除前确认", "默认先给短结论"],
+    "expected": "应识别为关键节点，建议或执行 dir 备份，并在删除前给出确认。"
   },
   {
     "id": 3,
-    "prompt": "备份 /var/minis/ 目录下的所有 .md 文件",
-    "expected": "应该批量备份多个文件，每个都有对应的备份文件"
+    "prompt": "我要批量替换几个关键配置文件，先留可恢复点。",
+    "expected_action": "smart_batch",
+    "need_confirmation": true,
+    "risk_level": "high",
+    "risk_score_range": "6+",
+    "decision_reason": "批量替换 + 关键配置 + 用户要求回滚点",
+    "user_facing_style": "short_conclusion_then_confirm",
+    "response_template": "high_risk",
+    "pass_criteria": ["识别为高风险", "对关键文件逐个 smart", "汇总结果"],
+    "expected": "应识别为关键节点，对关键文件执行 smart 备份，并汇总结果。"
+  },
+  {
+    "id": 4,
+    "prompt": "把这个文件恢复到最近一次备份。",
+    "expected_action": "restore-latest",
+    "need_confirmation": true,
+    "risk_level": "high",
+    "risk_score_range": "6+",
+    "decision_reason": "恢复会覆盖当前内容",
+    "user_facing_style": "short_conclusion_then_confirm",
+    "pass_criteria": ["选择 restore-latest", "提示会覆盖当前文件"],
+    "expected": "应调用 restore-latest，并说明会覆盖当前文件。"
+  },
+  {
+    "id": 5,
+    "prompt": "这个文件备份太多了，只留最近 3 份。",
+    "expected_action": "clean",
+    "need_confirmation": true,
+    "risk_level": "high",
+    "risk_score_range": "6+",
+    "decision_reason": "清理旧备份 + 会删除历史恢复点",
+    "user_facing_style": "short_conclusion_then_confirm",
+    "pass_criteria": ["选择 clean", "确认保留份数", "说明会删除旧备份"],
+    "expected": "应调用 clean，并在删除旧备份前确认保留份数。"
+  },
+  {
+    "id": 6,
+    "prompt": "这个文件刚刚已经智能备份过了，但我现在还是要强制新建一份备份。",
+    "expected_action": "file",
+    "need_confirmation": false,
+    "risk_level": "medium",
+    "risk_score_range": "3-5",
+    "decision_reason": "已有最近备份但用户明确要求新建一份",
+    "user_facing_style": "short_conclusion_then_action",
+    "pass_criteria": ["识别 smart 可能跳过", "改用 file"],
+    "expected": "当 smart 因限频可能跳过时，应改用 file 强制新建一份备份。"
+  },
+  {
+    "id": 7,
+    "prompt": "恢复最近一次备份失败了，你先帮我看看是不是路径不匹配。",
+    "expected_action": "list_then_restore",
+    "need_confirmation": false,
+    "risk_level": "medium",
+    "risk_score_range": "3-5",
+    "decision_reason": "恢复失败，需要先验证路径与可用备份",
+    "user_facing_style": "short_conclusion_then_action",
+    "pass_criteria": ["先 list 检查路径", "再决定 restore 或 restore-latest"],
+    "expected": "应先建议或执行 list 检查路径，再决定 restore 或 restore-latest。"
+  },
+  {
+    "id": 8,
+    "prompt": "只是给这个 markdown 文件改个错别字，不用备份。",
+    "expected_action": "no_backup",
+    "need_confirmation": false,
+    "risk_level": "low",
+    "risk_score_range": "0-2",
+    "decision_reason": "低风险文字微调",
+    "user_facing_style": "short_conclusion_only",
+    "response_template": "low_risk",
+    "pass_criteria": ["不误报为需要备份", "不强行解释", "不请求确认"],
+    "expected": "应直接允许修改，不建议额外备份。"
+  },
+  {
+    "id": 9,
+    "prompt": "为什么这次你建议先备份？",
+    "expected_action": "explain_reason",
+    "need_confirmation": false,
+    "risk_level": "contextual",
+    "risk_score_range": "contextual",
+    "decision_reason": "用户主动追问，需要展开解释",
+    "user_facing_style": "expanded_reason_on_request",
+    "response_template": "explanation_on_request",
+    "pass_criteria": ["只在被追问时展开原因", "说明为什么推荐当前动作"],
+    "expected": "应在用户追问后再展开解释，而不是默认先说一大段。"
   }
 ]

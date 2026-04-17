@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "prompt": "先给我一句结论，细节不用落文件。",
+    "expected_action": "chat_only",
+    "pass_criteria": ["识别为聊天内短结论", "不额外落盘"]
+  },
+  {
+    "id": 2,
+    "prompt": "把这次分析整理成一个 Markdown 报告，我后面还要看。",
+    "expected_action": "write_markdown_report",
+    "pass_criteria": ["识别为可复盘文档", "优先 Markdown", "按生命周期决定 shared 或 workspace"]
+  },
+  {
+    "id": 3,
+    "prompt": "做一个可视化页面给我看。",
+    "expected_action": "write_html_page",
+    "pass_criteria": ["识别为交互/可视化输出", "优先 HTML"]
+  },
+  {
+    "id": 4,
+    "prompt": "这个结果下次新会话还要继续用，别只放聊天里。",
+    "expected_action": "write_shared_artifact",
+    "pass_criteria": ["识别为跨会话结果", "优先写 shared", "使用稳定命名"]
+  },
+  {
+    "id": 5,
+    "prompt": "这个只是当前调试临时看一下，放 workspace 就行。",
+    "expected_action": "write_workspace_temp",
+    "pass_criteria": ["识别为临时文件", "优先写 workspace"]
+  },
+  {
+    "id": 6,
+    "prompt": "这个图表我要直接预览，不用做成报告。",
+    "expected_action": "write_attachment_preview",
+    "pass_criteria": ["识别为附件/媒体结果", "优先 attachment"]
+  },
+  {
+    "id": 7,
+    "prompt": "聊天里给我一句总结，然后把完整结果落成文件给我。",
+    "expected_action": "chat_plus_file_link",
+    "pass_criteria": ["识别为聊天摘要 + 文件组合输出", "不只做单一路径输出", "聊天不重复整份文件内容"]
+  },
+  {
+    "id": 8,
+    "prompt": "完整结果直接写成文件给我，不用在聊天里再解释很长。",
+    "expected_action": "file_first_minimal_chat",
+    "pass_criteria": ["识别为文件优先", "聊天只保留最小摘要", "不过度重复输出"]
+  },
+  {
+    "id": 9,
+    "prompt": "这是中间调试产物，别沉淀到 shared。",
+    "expected_action": "workspace_not_shared",
+    "pass_criteria": ["识别为中间产物", "避免误写 shared", "优先 workspace"]
+  },
+  {
+    "id": 10,
+    "prompt": "我不确定后面还用不用，先给我一个最轻量、方便继续改的版本。",
+    "expected_action": "lightweight_fallback",
+    "pass_criteria": ["不贸然写入 shared", "优先聊天摘要或 Markdown", "采用保守回退策略"]
+  },
+  {
+    "id": 11,
+    "prompt": "把这个长期资料做成页面还是报告都行，但别为了好看搞太重。",
+    "expected_action": "markdown_over_unnecessary_html",
+    "pass_criteria": ["不默认把 HTML 当高级方案", "若 Markdown 已足够则优先 Markdown"]
+  },
+  {
+    "id": 12,
+    "prompt": "这个结果会长期留存，但现在还是个半成品，先别沉淀成正式展示页。",
+    "expected_action": "defer_half_baked_html",
+    "pass_criteria": ["识别为未成熟可视化结果", "先用 Markdown/workspace 承载中间态", "避免半成品 HTML 误入长期产物"]
+  }
+]

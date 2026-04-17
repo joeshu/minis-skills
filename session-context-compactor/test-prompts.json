@@ -1,17 +1,101 @@
 [
   {
     "id": 1,
-    "prompt": "把当前会话整理成摘要，并删除历史会话，只保留必要文件。",
-    "expected": "应先生成摘要、列出必要文件、确认后删除历史会话。"
+    "prompt": "帮我把当前会话整理成一个后续能继续执行的摘要，不要删历史。",
+    "mode": "summary_only",
+    "risk_level": "low",
+    "need_confirmation": false,
+    "response_template": "summary_only",
+    "project_type": "mixed",
+    "expected_action": "generate_summary_only",
+    "pass_criteria": ["识别为模式A", "输出执行摘要", "列出必要保留文件"]
   },
   {
     "id": 2,
-    "prompt": "我想精简上下文，后续只靠摘要和文件继续做。",
-    "expected": "应生成执行摘要，并明确哪些文件必须保留。"
+    "prompt": "把当前会话整理成摘要，然后删除历史会话，只保留后续继续要用的文件。",
+    "mode": "summary_then_delete_history",
+    "risk_level": "high",
+    "need_confirmation": true,
+    "response_template": "summary_then_confirm_delete",
+    "project_type": "mixed",
+    "expected_action": "generate_summary_then_confirm_delete",
+    "pass_criteria": ["先生成摘要", "先列必要文件", "删除前确认"]
   },
   {
     "id": 3,
-    "prompt": "删除历史会话前，把当前会话里需要保留的文件列出来。",
-    "expected": "应先做文件保留清单，再执行删除前确认。"
+    "prompt": "删除历史会话前，先把当前项目里必须保留的文件列出来。",
+    "mode": "required_files_first",
+    "risk_level": "medium",
+    "need_confirmation": false,
+    "response_template": "summary_only",
+    "project_type": "mixed",
+    "expected_action": "list_required_files_before_delete",
+    "pass_criteria": ["先输出必要保留文件清单", "不直接删除历史会话"]
+  },
+  {
+    "id": 4,
+    "prompt": "我要下次换个新会话继续做，你把 handoff 摘要写到跨会话能读到的位置。",
+    "mode": "cross_session_handoff",
+    "risk_level": "medium",
+    "need_confirmation": false,
+    "response_template": "cross_session_handoff",
+    "project_type": "mixed",
+    "expected_action": "write_summary_to_shared",
+    "pass_criteria": ["识别为跨会话场景", "默认写入 /var/minis/shared/", "给出后续读取入口"]
+  },
+  {
+    "id": 5,
+    "prompt": "你别把整段对话复制给我，只保留后续执行必须知道的信息。",
+    "mode": "noise_reduction",
+    "risk_level": "low",
+    "need_confirmation": false,
+    "response_template": "summary_only",
+    "project_type": "mixed",
+    "expected_action": "compact_without_transcript_dump",
+    "pass_criteria": ["不复制整段对话", "只保留执行关键信息", "摘要保持紧凑"]
+  },
+  {
+    "id": 6,
+    "prompt": "如果现在直接删历史会话会不会丢信息？你先判断一下。",
+    "mode": "risk_check_before_delete",
+    "risk_level": "high",
+    "need_confirmation": false,
+    "response_template": "risk_warning",
+    "project_type": "mixed",
+    "expected_action": "check_summary_and_required_files_before_delete",
+    "pass_criteria": ["识别信息丢失风险", "先检查摘要和必要文件", "不给出直接删除建议"]
+  },
+  {
+    "id": 7,
+    "prompt": "这是一个技能项目，把当前会话整理成后续继续优化 skill 用的 handoff。",
+    "mode": "summary_only",
+    "risk_level": "medium",
+    "need_confirmation": false,
+    "response_template": "cross_session_handoff",
+    "project_type": "skill",
+    "expected_action": "generate_skill_project_handoff",
+    "pass_criteria": ["使用技能项目模板思路", "必要文件包含 SKILL.md/README/test-prompts", "摘要适合继续优化技能"]
+  },
+  {
+    "id": 8,
+    "prompt": "这是一个代码项目，把当前会话整理成开发交接摘要，下次我要继续改代码。",
+    "mode": "summary_only",
+    "risk_level": "medium",
+    "need_confirmation": false,
+    "response_template": "cross_session_handoff",
+    "project_type": "code",
+    "expected_action": "generate_code_project_handoff",
+    "pass_criteria": ["使用代码项目模板思路", "必要文件包含代码/配置/测试文件", "摘要适合继续开发"]
+  },
+  {
+    "id": 9,
+    "prompt": "你生成的摘要如果没列必要文件，就不算合格，重新检查。",
+    "mode": "quality_guardrail",
+    "risk_level": "medium",
+    "need_confirmation": false,
+    "response_template": "risk_warning",
+    "project_type": "mixed",
+    "expected_action": "self_check_summary_quality",
+    "pass_criteria": ["触发摘要质量自检", "缺少必要文件时判为不合格", "要求补全再继续"]
   }
 ]
