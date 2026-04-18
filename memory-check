@@ -1,0 +1,2 @@
+#!/bin/sh
+python3 /var/minis/skills/memory-system-maintainer/memory_system_check.py "$@"

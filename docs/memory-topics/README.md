@@ -1,15 +1,28 @@
 # memory_topics 说明
 
-用途：存放真实专题记忆样本，用于：
+用途：存放真实专题记忆样本与体系级规则文件，用于：
 - 任务执行前专题优先检索
 - 记忆系统真实案例回归测试
 - 验证专题 / GLOBAL / daily 的边界
+- 维护回答风格、检索路由与治理规则体系
+
+## 目录现实说明
+- 当前目录同时包含两类内容：
+  - 体系级规则与治理文件
+  - 历史 / 平台 / 工作流专题样本
+- 前者主要由 `TopicIndex.md` 与 `SystemArchitecture.md` 导航；后者主要作为样本专题与历史专题入口保留。
+
+## 三个核心入口的职责
+- `README.md`：目录说明、命名建议、样本型专题入口。
+- `TopicIndex.md`：体系级规则文件与治理文件导航入口，不承担目录全量清单职责。
+- `SystemArchitecture.md`：体系分层、职责边界、调用顺序、最小执行链总览。
 
 ## 建议命名
 - 项目专题：`<project>.md`
 - 平台专题：`github.md`、`bilibili.md`
 - 工作流专题：`github-sync.md`
 - 方法论专题：`memory-maintenance.md`、`skill-design.md`
+- 体系治理文件：优先使用 PascalCase 或清晰的规则型命名
 
 ## 当前样本
 - `github.md`
