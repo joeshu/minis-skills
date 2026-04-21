@@ -1,2 +1,0 @@
-#!/bin/sh
-python3 /var/minis/skills/memory-system-git-sync/scripts/memory_git_sync.py "$@"
