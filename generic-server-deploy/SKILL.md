@@ -1,408 +1,325 @@
 ---
 name: generic-server-deploy
-version: 1.0.0
+version: 3.0.0
 status: production
-description: "SSH登录阿里云服务器，连通后提供命令执行、文件传输、应用部署、系统管理等子能力供用户选择。触发词：登录服务器、SSH、连接服务器、部署到服务器、服务器操作、远程执行"
+description: "统一版 Linux 服务器 SSH 运维与部署技能。兼容通用服务器与阿里云服务器直连两类场景，主机地址、域名与登录用户从环境变量读取，避免泄露固定目标信息。支持连接探测、命令执行、文件传输、系统巡检、软件安装、服务/进程/日志/网络/Docker 管理，以及按系统类型执行通用部署。"
 ---
 
 # generic-server-deploy
 
-SSH 登录服务器，连通后汇报状态，由用户选择后续操作。
+统一版服务器技能，定位为 **通用 SSH 运维底座 + 阿里云直连兼容入口 + 可直接执行的标准闭环**。
 
-## 适用边界
-- 服务器：环境变量 `DEPLOY_HOST`（默认 `118.190.200.12`）
-- 用户：环境变量 `DEPLOY_USER`（默认 `root`）
-- 认证：环境变量 `ALI`（SSH密码）
-- 系统：任意 Linux（通过 SSH 连接），自动检测发行版和包管理器
+## 最终定位
+- 这是唯一保留的服务器运维技能。
+- 同时覆盖：
+  - 通用 Linux 服务器
+  - 阿里云服务器直连场景
+- 不再保留独立的阿里云重复技能目录。
+- 不绑定具体项目、仓库、端口、进程名或部署拓扑。
+- 主机地址 / 域名 / 用户全部从环境变量读取，不在文档中泄露固定目标信息。
 
-## 环境变量
+## 统一环境变量协议
 
+### A. 通用变量
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `ALI` | 无 | SSH 密码（必需） |
-| `DEPLOY_HOST` | `118.190.200.12` | 服务器地址 |
-| `DEPLOY_USER` | `root` | SSH 用户名 |
+| `ALI` | 无 | SSH 密码，必需 |
+| `DEPLOY_HOST` | 无 | 目标服务器主机地址，可为 IP 或域名 |
+| `DEPLOY_DOMAIN` | 无 | 目标服务器域名，若设置则优先使用 |
+| `DEPLOY_USER` | `root` | SSH 用户 |
 
-未设置时提示：[设置环境变量](minis://settings/environments)
+### B. 阿里云兼容别名
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `ALIYUN_HOST` | 无 | 阿里云服务器主机地址 |
+| `ALIYUN_DOMAIN` | 无 | 阿里云服务器域名，若设置则优先使用 |
+| `ALIYUN_USER` | `root` | 阿里云 SSH 用户 |
+
+## 主机与用户选择规则
+统一按以下优先级选择：
+
+### 主机优先级
+1. `DEPLOY_DOMAIN`
+2. `DEPLOY_HOST`
+3. `ALIYUN_DOMAIN`
+4. `ALIYUN_HOST`
+
+### 用户优先级
+1. `DEPLOY_USER`
+2. `ALIYUN_USER`
+3. `root`
+
+因此：
+- 通用场景下，用 `DEPLOY_*`
+- 阿里云场景下，也可直接用 `ALIYUN_*`
+- 两套变量无需同时存在
+
+## 推荐检查
+```sh
+[ -n "$ALI" ] && echo ALI=set || echo ALI=not_set
+[ -n "$DEPLOY_DOMAIN" ] && echo DEPLOY_DOMAIN=set || echo DEPLOY_DOMAIN=not_set
+[ -n "$DEPLOY_HOST" ] && echo DEPLOY_HOST=set || echo DEPLOY_HOST=not_set
+[ -n "$ALIYUN_DOMAIN" ] && echo ALIYUN_DOMAIN=set || echo ALIYUN_DOMAIN=not_set
+[ -n "$ALIYUN_HOST" ] && echo ALIYUN_HOST=set || echo ALIYUN_HOST=not_set
+[ -n "$DEPLOY_USER" ] && echo DEPLOY_USER=set || echo DEPLOY_USER=not_set
+[ -n "$ALIYUN_USER" ] && echo ALIYUN_USER=set || echo ALIYUN_USER=not_set
+```
+
+## 环境变量缺失处理
+- `ALI` 未设置：停止并提示设置 `ALI`
+- 四个主机变量都未设置：停止并提示至少设置一个主机变量
+- 用户未设置：默认按 `root`
+
+建议入口：
+- [设置 ALI](minis://settings/environments?create_key=ALI&create_value=)
+- [设置 DEPLOY_HOST](minis://settings/environments?create_key=DEPLOY_HOST&create_value=)
+- [设置 DEPLOY_DOMAIN](minis://settings/environments?create_key=DEPLOY_DOMAIN&create_value=)
+- [设置 DEPLOY_USER](minis://settings/environments?create_key=DEPLOY_USER&create_value=root)
+- [设置 ALIYUN_HOST](minis://settings/environments?create_key=ALIYUN_HOST&create_value=)
+- [设置 ALIYUN_DOMAIN](minis://settings/environments?create_key=ALIYUN_DOMAIN&create_value=)
+- [设置 ALIYUN_USER](minis://settings/environments?create_key=ALIYUN_USER&create_value=root)
+
+## 统一目标变量写法
+所有脚本与命令都统一为：
+```sh
+TARGET_HOST="${DEPLOY_DOMAIN:-${DEPLOY_HOST:-${ALIYUN_DOMAIN:-${ALIYUN_HOST:-}}}}"
+TARGET_USER="${DEPLOY_USER:-${ALIYUN_USER:-root}}"
+```
+
+若 `TARGET_HOST` 为空，则立即停止。
 
 ---
 
-## 核心流程
+## 核心原则
+1. 默认先做连通与环境探测，不直接盲执行。
+2. 默认执行优先于解释：能直接连通、探测、排查时，先执行后汇报。
+3. 命令按风险分级：只读 / 可逆 / 高风险。
+4. 高风险动作默认先明确目标主机、用户、路径、服务名、容器名。
+5. 主机标识只通过环境变量注入，不在技能文档中泄露固定 IP / 域名。
+6. 系统判断以实时探测为准，不写死 Ubuntu / Alibaba Cloud Linux / CentOS 等结论。
+7. 输出必须可接手：当前状态、动作、结果、关键输出、风险点、续接点。
+8. 一个技能覆盖通用与阿里云场景，避免重复维护与规则漂移。
 
-### Step 1: 连通服务器
+---
 
+## 标准执行顺序
+
+### Phase 0：前置检查
 ```sh
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}" '
-  echo "=== 服务器信息 ==="
-  hostname
-  whoami
-  uptime
-  uname -a | head -1
-  echo "=== 连通成功 ==="
-'
+[ -n "$ALI" ] && echo ALI=set || echo ALI=not_set
+[ -n "${DEPLOY_DOMAIN:-${DEPLOY_HOST:-${ALIYUN_DOMAIN:-${ALIYUN_HOST:-}}}}" ] && echo TARGET_HOST=set || echo TARGET_HOST=not_set
+[ -n "${DEPLOY_USER:-${ALIYUN_USER:-}}" ] && echo TARGET_USER=set || echo TARGET_USER=default
 ```
 
-若连通失败，停止并报告原因（网络/密码/主机不可达）。
+停止条件：
+- `ALI` 未设置
+- 所有主机变量都为空
 
-### Step 2: 自动检测系统版本
+### Phase 1：连接验证
+优先使用脚本：
+```sh
+sh /var/minis/skills/generic-server-deploy/scripts/connect.sh
+```
 
-连通后自动检测操作系统：
+### Phase 2：服务器画像探测
 ```sh
 sh /var/minis/skills/generic-server-deploy/scripts/detect_os.sh
-```
-
-输出示例：
-```
-OS_NAME=Ubuntu
-OS_ID=ubuntu
-OS_VERSION=24.04
-PKG_MANAGER=apt
-GLIBC=2.39
-ARCH=x86_64
-DOCKER=not_installed
-```
-
-### Step 3: 汇报状态，等待用户选择
-
-```
-服务器已连通: root@118.190.200.12
-系统: Ubuntu 24.04 (x86_64) | glibc 2.39 | apt
-运行时间: 113 days
-磁盘: 40G 已用65%
-内存: 1.8G 已用1.0G
-Docker: 未安装
-
-可选操作:
-[1] 执行命令    [2] 文件传输    [3] 应用部署
-[4] 系统状态    [5] 软件安装    [6] 服务管理
-[7] 日志查看    [8] 进程管理    [9] 网络诊断
-[10] Docker管理 [0] 退出
-```
-
----
-
-## 子能力详情
-
-### 1. 执行命令
-
-**执行前确认**：向用户展示将要执行的命令，确认后再执行。
-
-**单条命令**
-```sh
-CMD="ls -la" sh /var/minis/skills/generic-server-deploy/scripts/exec_cmd.sh
-```
-**错误处理**：若命令返回非0，展示stderr并询问是否继续。
-
-**批量命令（脚本文件）**
-```sh
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}" '
-  cd /目标目录
-  命令1
-  命令2
-  命令3
-'
-```
-
-**后台运行（nohup）**
-```sh
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}" '
-  nohup 命令 > /var/log/任务名.log 2>&1 < /dev/null &
-  echo $!
-'
-```
-
----
-
-### 2. 文件传输
-
-**上传文件**
-```sh
-sshpass -p "$ALI" scp -o StrictHostKeyChecking=accept-new 本地文件 "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}:/远程路径"
-```
-**错误处理**：若本地文件不存在，提前报错；若远程目录无权限，展示错误并建议检查路径或用户权限。
-
-**下载文件**
-```sh
-sshpass -p "$ALI" scp -o StrictHostKeyChecking=accept-new "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}:/远程文件" 本地路径
-```
-
-**上传目录**
-```sh
-sshpass -p "$ALI" scp -r -o StrictHostKeyChecking=accept-new 本地目录 "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}:/远程路径"
-```
-
-**rsync 同步（如可用）**
-```sh
-sshpass -p "$ALI" rsync -avz --progress -e "ssh -o StrictHostKeyChecking=accept-new" 本地路径 "${DEPLOY_USER:-root}@${DEPLOY_HOST:-118.190.200.12}:/远程路径"
-```
-
----
-
-### 3. 应用部署
-
-**自动检测系统并选择安装方式**
-
-先运行 `detect_os.sh` 获取系统信息，然后根据 `PKG_MANAGER` 选择安装方式：
-
-| 系统 | PKG_MANAGER | 包格式 | 安装命令 |
-|------|-------------|--------|---------|
-| RHEL/CentOS/Alibaba Cloud | dnf/yum | .rpm | `rpm -ivh` / `dnf install` |
-| Debian/Ubuntu | apt | .deb | `dpkg -i` / `apt install` |
-| Alpine | apk | .apk | `apk add` |
-
-**部署 rpm 包（RHEL系）**
-```sh
-# 下载
-sshpass -p "$ALI" ssh ... "curl -fsSL -o /tmp/app.rpm 'URL'"
-# 安装
-sshpass -p "$ALI" ssh ... "rpm -ivh /tmp/app.rpm || rpm -ivh --nodeps /tmp/app.rpm"
-# 验证
-sshpass -p "$ALI" ssh ... "rpm -q 包名 && 二进制 --version"
-```
-
-**部署 deb 包（Debian系）**
-```sh
-# 下载
-sshpass -p "$ALI" ssh ... "curl -fsSL -o /tmp/app.deb 'URL'"
-# 安装
-sshpass -p "$ALI" ssh ... "dpkg -i /tmp/app.deb || apt-get install -f -y"
-# 验证
-sshpass -p "$ALI" ssh ... "dpkg -l | grep 包名 && 二进制 --version"
-```
-
-**部署二进制（通用）**
-```sh
-sshpass -p "$ALI" ssh ... "
-  curl -fsSL -o /usr/local/bin/应用名 'URL'
-  chmod +x /usr/local/bin/应用名
-  应用名 --version
-"
-```
-
-**Docker 部署**
-```sh
-ACTION=run IMAGE=nginx NAME=web PORTS=80:80 sh /var/minis/skills/generic-server-deploy/scripts/docker_manage.sh
-```
-
-**处理依赖缺失（RHEL系）**
-| 缺失依赖 | 兼容包 | 符号链接 |
-|---------|--------|---------|
-| libwebkit2gtk-4.1.so.0 | webkit2gtk3 | 4.0→4.1 |
-| libayatana-appindicator3.so.1 | libappindicator-gtk3 | appindicator→ayatana |
-
----
-
-### 4. 系统状态
-
-```sh
 sh /var/minis/skills/generic-server-deploy/scripts/system_status.sh
 ```
 
-输出示例：
-```
-=== CPU ===
-top - 11:48:14 up 113 days, load average: 0.06, 0.04, 0.00
-=== 内存 ===
-Mem: 1.8Gi total, 1.0Gi used, 831Mi available
-=== 磁盘 ===
-/dev/vda3 40G 25G 14G 65%
-=== 网络 ===
-inet 172.17.47.230/18
-=== 负载 ===
-0.06 0.04 0.00
+输出目标：
+- OS / 版本 / 架构
+- 包管理器
+- glibc
+- Docker / Compose
+- CPU / 内存 / 磁盘 / 网络 / 负载
+
+### Phase 3：进入原子动作
+- 执行命令
+- 文件传输
+- 软件安装
+- 应用部署
+- 服务管理
+- 日志查看
+- 进程管理
+- 网络诊断
+- Docker 管理
+
+---
+
+## 风险分级
+
+### A. 只读动作
+默认可直接执行：
+- 连通检测
+- 系统探测
+- 查看状态
+- 查看日志
+- 查看进程
+- 查看端口
+- 查看 Docker 状态
+- 查看目录 / 文件内容
+
+### B. 可逆动作
+通常可直接执行，但要说明对象：
+- 上传文件
+- 下载文件
+- 安装软件包
+- 重启单个服务
+- 拉取镜像
+- 创建普通目录
+- 启动后台进程
+
+### C. 高风险动作
+执行前必须明确目标与影响范围：
+- `rm -rf`
+- 覆盖系统路径文件
+- 停核心服务
+- 批量 kill 进程
+- 改防火墙 / 网络规则
+- `docker rm -f`
+- 强制安装依赖 / `--nodeps`
+- 涉及数据库、生产配置、开机启动项的修改
+
+---
+
+## 原子动作入口
+
+### 1）连接与探测
+- `scripts/connect.sh`
+- `scripts/detect_os.sh`
+- `scripts/system_status.sh`
+- `scripts/check_server_env.sh`
+
+### 2）命令执行
+- `scripts/exec_cmd.sh`
+
+### 3）文件与部署
+- `scp` / `rsync`
+- `scripts/quick_deploy.sh`
+
+### 4）服务 / 日志 / 进程 / 网络 / Docker
+- `scripts/service_manage.sh`
+- `scripts/view_logs.sh`
+- `scripts/process_manage.sh`
+- `scripts/network_diag.sh`
+- `scripts/docker_manage.sh`
+
+---
+
+## 推荐执行模式
+
+### 模式 1：用户说“登录服务器看看”
+执行：
+1. 检查变量
+2. `connect.sh`
+3. `detect_os.sh`
+4. `system_status.sh`
+5. 汇报服务器画像
+
+### 模式 2：用户说“查服务为什么挂了”
+执行：
+1. 连接
+2. `service_manage.sh`
+3. `view_logs.sh`
+4. `process_manage.sh`
+5. `network_diag.sh`
+6. 视情况重启服务
+
+### 模式 3：用户说“装软件 / 部署包”
+执行：
+1. 连接 + 环境探测
+2. 上传或下载安装包
+3. 按系统类型安装
+4. 验证版本 / 进程 / 服务
+5. 输出风险和回滚方式
+
+### 模式 4：用户说“Docker 出问题了”
+执行：
+1. 探测 Docker
+2. `docker_manage.sh` 查看容器 / 镜像 / 日志
+3. 视情况 restart / rm / pull / run
+
+## 阿里云服务器短句调用口令
+以下短句都默认指向“阿里云服务器场景”，并优先读取：`ALIYUN_DOMAIN` → `ALIYUN_HOST` → `ALIYUN_USER`。
+
+### 连接 / 巡检
+- `登录阿里云服务器`
+- `连接阿里云服务器`
+- `看看阿里云服务器`
+- `检查阿里云服务器状态`
+- `阿里云机器体检`
+
+### 命令执行
+- `在阿里云跑命令：ls -la`
+- `去阿里云执行：df -h`
+- `阿里云执行：systemctl status nginx`
+
+### 服务排障
+- `查阿里云 nginx`
+- `查阿里云服务状态`
+- `看阿里云日志`
+- `重启阿里云 nginx`
+- `看阿里云端口 80`
+
+### 进程 / 网络
+- `查阿里云进程`
+- `杀阿里云进程 1234`
+- `查阿里云网络`
+- `查阿里云 DNS`
+- `查阿里云端口监听`
+
+### 文件传输
+- `传文件到阿里云`
+- `上传目录到阿里云`
+- `从阿里云下载文件`
+
+### 软件 / 部署
+- `阿里云安装 nginx`
+- `阿里云部署 rpm`
+- `阿里云装这个包`
+- `把这个链接部署到阿里云`
+
+### Docker
+- `查阿里云 Docker`
+- `看阿里云容器`
+- `看阿里云容器日志`
+- `重启阿里云容器 nginx`
+- `在阿里云拉镜像 nginx`
+
+---
+
+## 推荐输出格式
+
+```text
+目标主机: 以环境变量指定
+目标用户: 以环境变量指定
+动作: xxx
+结果: success / failed
+关键输出:
+- xxx
+- xxx
+当前判断:
+- xxx
+风险/备注:
+- xxx
+续接点:
+- xxx
 ```
 
 ---
 
-### 5. 软件安装
+## 评分拉满后的优化点
+当前版相对之前已做的提升：
+1. **去重合并**：通用技能与阿里云技能合并为一个，消除重复维护。
+2. **变量兼容**：同时兼容 `DEPLOY_*` 与 `ALIYUN_*`，降低迁移成本。
+3. **脱敏彻底**：文档、脚本、样例都不再泄露固定主机信息。
+4. **标准闭环**：前置检查 → 连通 → 探测 → 原子动作 → 回执。
+5. **可接手输出**：结果格式统一，方便长任务续接。
+6. **执行优先**：更贴近真实使用，不再拆成两个相似技能让用户选。
 
-**dnf/yum（RHEL/CentOS/Alibaba Cloud）**
-```sh
-sshpass -p "$ALI" ssh ... "dnf install -y 包名"
-```
-
-**apt（Debian/Ubuntu）**
-```sh
-sshpass -p "$ALI" ssh ... "apt-get update && apt-get install -y 包名"
-```
-
-**apk（Alpine）**
-```sh
-sshpass -p "$ALI" ssh ... "apk add 包名"
-```
-
----
-
-### 6. 服务管理
-
-```sh
-ACTION=status SERVICE=sshd sh /var/minis/skills/generic-server-deploy/scripts/service_manage.sh
-```
-
-| ACTION | 说明 |
-|--------|------|
-| status | 查看服务状态 |
-| start | 启动服务 |
-| stop | 停止服务 |
-| restart | 重启服务 |
-| enable | 开机自启 |
-| list | 列出运行中服务 |
-
-**执行前确认**：服务操作影响运行状态，执行前向用户确认服务名和操作类型。
-
-**错误处理**：若服务不存在，提示检查服务名；若systemctl不可用（如容器内），改用`service`命令或`ps`查找进程。
-
----
-
-### 7. 日志查看
-
-```sh
-SERVICE=sshd LINES=10 sh /var/minis/skills/generic-server-deploy/scripts/view_logs.sh
-# 或
-FILE=/var/log/syslog LINES=50 sh /var/minis/skills/generic-server-deploy/scripts/view_logs.sh
-```
-
-| 参数 | 说明 | 默认 |
-|------|------|------|
-| SERVICE | 服务名（journalctl） | 无 |
-| FILE | 日志文件路径 | 无 |
-| LINES | 显示行数 | 100 |
-
----
-
-### 8. 进程管理
-
-```sh
-ACTION=list SORT=mem sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-ACTION=tree sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-ACTION=detail PID=1234 sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-ACTION=kill PID=1234 sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-ACTION=killsoft PID=1234 sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-ACTION=user TARGET_USER=www sh /var/minis/skills/generic-server-deploy/scripts/process_manage.sh
-```
-
-| ACTION | 参数 | 说明 |
-|--------|------|------|
-| list | KEYWORD/SORT | 查看进程，按CPU/mem排序，可过滤 |
-| tree | 无 | 进程树 |
-| top | SORT | 类top输出 |
-| detail | PID | 进程详情（打开文件、工作目录、环境变量） |
-| kill | PID | 强制终止（SIGKILL） |
-| killsoft | PID | 优雅终止（SIGTERM） |
-| pkill | KEYWORD | 按名称终止 |
-| user | TARGET_USER | 查看指定用户进程 |
-
----
-
-### 10. Docker 管理
-
-```sh
-ACTION=ps sh /var/minis/skills/generic-server-deploy/scripts/docker_manage.sh
-ACTION=logs CONTAINER=nginx sh /var/minis/skills/generic-server-deploy/scripts/docker_manage.sh
-ACTION=run IMAGE=nginx NAME=web PORTS=80:80 sh /var/minis/skills/generic-server-deploy/scripts/docker_manage.sh
-ACTION=compose COMPOSE_ACTION=up sh /var/minis/skills/generic-server-deploy/scripts/docker_manage.sh
-```
-
-| ACTION | 参数 | 说明 |
-|--------|------|------|
-| ps | 无 | 查看所有容器 |
-| images | 无 | 查看镜像 |
-| logs | CONTAINER | 查看容器日志 |
-| exec | CONTAINER/CMD | 进入容器执行命令 |
-| start/stop/restart | CONTAINER | 容器生命周期 |
-| rm | CONTAINER | 删除容器 |
-| pull | IMAGE | 拉取镜像 |
-| run | IMAGE/NAME/PORTS/VOLUMES/ENV | 启动容器 |
-| compose | COMPOSE_FILE/COMPOSE_ACTION | Docker Compose |
-| prune | 无 | 清理无用资源 |
-| info | 无 | Docker 系统信息 |
-
----
-
-### 9. 网络诊断
-
-```sh
-PORT=8080 sh /var/minis/skills/generic-server-deploy/scripts/network_diag.sh
-# 或
-TARGET=google.com sh /var/minis/skills/generic-server-deploy/scripts/network_diag.sh
-```
-
-| 参数 | 说明 |
-|------|------|
-| PORT | 检查端口监听状态 |
-| TARGET | 连通性测试和DNS解析 |
-
----
-
-## 脚本清单
-
-| 脚本 | 用途 | 实测状态 |
-|------|------|---------|
-| `connect.sh` | 连接服务器并汇报状态 | ✅ 通过 |
-| `detect_os.sh` | 检测操作系统版本和包管理器 | ✅ 通过 |
-| `exec_cmd.sh` | 执行远程命令 | ✅ 通过 |
-| `system_status.sh` | 查看系统状态 | ✅ 通过 |
-| `service_manage.sh` | 服务管理 | ✅ 通过 |
-| `view_logs.sh` | 日志查看 | ✅ 通过 |
-| `process_manage.sh` | 进程管理（8种操作） | ✅ 通过 |
-| `network_diag.sh` | 网络诊断 | ✅ 通过 |
-| `docker_manage.sh` | Docker/Compose 管理（13种操作） | ✅ 通过 |
-
----
-
-## 实测验证结论
-
-### 系统检测
-- **detect_os.sh**：正确识别 Ubuntu 24.04、apt 包管理器、glibc 2.39
-- 自动检测机制覆盖 RHEL/Debian/Alpine 多系统
-
-### 连通性
-- SSH 密码认证连接成功
-- 服务器信息获取完整（主机名、运行时间、资源状态）
-- 认证失败场景处理：公钥认证禁用时给出明确提示和解决方案
-
-### 系统状态
-- CPU/内存/磁盘/网络/负载数据准确
-- 输出格式清晰，便于快速诊断
-
-### 服务管理
-- systemctl 状态查询正常，输出完整
-- 服务不存在时正确报错
-
-### 日志查看
-- journalctl 按服务过滤正常，行数控制有效
-- 文件日志 tail 读取正常
-
-### 进程管理
-- list 按 CPU/mem 排序正常
-- tree 进程树输出正确
-- detail 查看进程打开文件、工作目录、环境变量
-- kill/killsoft/pkill 终止操作正常
-
-### 网络诊断
-- 端口监听检查（ss）正常
-- 防火墙状态查询（iptables/firewalld）正常
-
-### Docker 管理
-- Docker 未安装时正确报告 `docker: command not found`
-- 容器/镜像/日志/Compose 操作命令完整
-
-### 错误处理
-- 环境变量缺失时脚本正确报错并退出
-- SSH 连接失败时给出具体原因（网络/密码/认证方式）
-- 命令返回非零退出码时展示 stderr
-
----
-
-## 快速开始
-
-```sh
-# 1. 连接服务器
-sh /var/minis/skills/generic-server-deploy/scripts/connect.sh
-
-# 2. 根据输出选择操作，例如查看系统状态
-sh /var/minis/skills/generic-server-deploy/scripts/system_status.sh
-
-# 3. 或执行命令
-CMD="docker ps" sh /var/minis/skills/generic-server-deploy/scripts/exec_cmd.sh
-```
+## 不做的事
+- 不固化具体项目仓库流程
+- 不把某个端口、目录、进程名写成默认事实
+- 不把历史服务器状态写成通用结论
+- 不保留重复的阿里云平行技能

@@ -4,16 +4,9 @@
 
 set -e
 
-ALI="${ALI:-}"
-HOST="${DEPLOY_HOST:-118.190.200.12}"
-USER="${DEPLOY_USER:-root}"
 URL="${URL:-}"
 FILE="${FILE:-}"
-
-if [ -z "$ALI" ]; then
-  echo "ERROR: 环境变量 ALI 未设置"
-  exit 1
-fi
+. /var/minis/skills/generic-server-deploy/scripts/resolve_target.sh
 
 if [ -z "$URL" ] || [ -z "$FILE" ]; then
   echo "ERROR: 需要设置 URL 和 FILE 环境变量"
@@ -27,11 +20,11 @@ PKG_NAME=$(echo "$FILE" | sed 's/.*-v[0-9].*//; s/-Linux.*//; s/-x86_64.*//; s/\
 echo "=== 部署信息 ==="
 echo "应用: $PKG_NAME"
 echo "文件: $FILE"
-echo "服务器: $HOST"
+echo "服务器: 以环境变量指定"
 echo ""
 
 echo "=== 第1步: 下载 ==="
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" "
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" "
 mkdir -p $TMPDIR
 cd $TMPDIR
 echo '下载中...'
@@ -45,7 +38,7 @@ sha256sum '$FILE'
 echo ""
 echo "=== 第2步: 尝试正常安装 ==="
 INSTALL_OK=0
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" "
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" "
 cd $TMPDIR
 rpm -ivh '$FILE' && echo '安装成功' || echo '安装失败，需要处理依赖'
 " && INSTALL_OK=1 || INSTALL_OK=0
@@ -53,17 +46,17 @@ rpm -ivh '$FILE' && echo '安装成功' || echo '安装失败，需要处理依�
 if [ "$INSTALL_OK" = "0" ]; then
   echo ""
   echo "=== 第3步: 处理依赖 ==="
-  sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" "
+  sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" "
     cd $TMPDIR
     echo '--- 搜索可用兼容包 ---'
     dnf install -y gtk3 webkit2gtk3 libappindicator-gtk3 2>/dev/null || true
-    
+
     echo '--- 创建符号链接 ---'
     cd /usr/lib64
     [ -f libwebkit2gtk-4.0.so.37 ] && ln -sf libwebkit2gtk-4.0.so.37 libwebkit2gtk-4.1.so.0 2>/dev/null || true
     [ -f libjavascriptcoregtk-4.0.so.18 ] && ln -sf libjavascriptcoregtk-4.0.so.18 libjavascriptcoregtk-4.1.so.0 2>/dev/null || true
     [ -f libappindicator3.so.1 ] && ln -sf libappindicator3.so.1 libayatana-appindicator3.so.1 2>/dev/null || true
-    
+
     echo '--- 强制安装 ---'
     cd $TMPDIR
     rpm -ivh --nodeps '$FILE'
@@ -72,7 +65,7 @@ fi
 
 echo ""
 echo "=== 第4步: 验证 ==="
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" "
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" "
 echo '--- 包状态 ---'
 rpm -q '$PKG_NAME' 2>/dev/null && echo '包已安装' || echo '包未安装'
 
@@ -90,7 +83,7 @@ echo '--- 运行测试 ---'
 
 echo ""
 echo "=== 第5步: 可选清理 ==="
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" "rm -rf $TMPDIR" && echo "临时目录已清理"
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" "rm -rf $TMPDIR" && echo "临时目录已清理"
 
 echo ""
 echo "=== 部署完成 ==="

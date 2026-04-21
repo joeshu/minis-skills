@@ -1,17 +1,17 @@
 [
   {
     "id": 1,
-    "prompt": "登录阿里云服务器，把 https://github.com/farion1231/cc-switch/releases/download/v3.13.0/CC-Switch-v3.13.0-Linux-x86_64.rpm 部署上去",
-    "expected": "SSH登录服务器，下载rpm包，处理依赖兼容性（符号链接/强制安装），验证安装状态，明确报告不兼容问题"
+    "prompt": "登录服务器，先看系统状态",
+    "expected": "检查 ALI 与目标主机变量，连接服务器，探测系统并输出状态巡检结果"
   },
   {
     "id": 2,
-    "prompt": "服务器上装个Linux桌面应用，地址是 https://github.com/example/app/releases/download/v1.0/app-1.0.rpm",
-    "expected": "通用流程：检查环境→下载→尝试安装→处理依赖→验证→报告结果或替代方案"
+    "prompt": "登录阿里云服务器，查 nginx 为什么挂了",
+    "expected": "兼容读取 ALIYUN_DOMAIN/ALIYUN_HOST，连接服务器后查看服务状态、日志、进程和端口"
   },
   {
     "id": 3,
-    "prompt": "把 https://github.com/some/tool/releases/download/v2.0/tool-x86_64.rpm 部署到118.190.200.12",
-    "expected": "识别固定上下文（服务器IP、root用户、ALI密码），执行部署流程，处理可能的依赖问题"
+    "prompt": "把 https://github.com/some/tool/releases/download/v2.0/tool-x86_64.rpm 部署到目标服务器",
+    "expected": "从 DEPLOY_* 或 ALIYUN_* 变量读取目标主机，执行部署流程并验证安装结果"
   }
 ]

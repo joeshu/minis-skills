@@ -4,17 +4,10 @@
 
 set -e
 
-ALI="${ALI:-}"
-HOST="${DEPLOY_HOST:-118.190.200.12}"
-USER="${DEPLOY_USER:-root}"
-
-if [ -z "$ALI" ]; then
-  echo "ERROR: 环境变量 ALI 未设置"
-  exit 1
-fi
+. /var/minis/skills/generic-server-deploy/scripts/resolve_target.sh
 
 echo "=== 服务器环境检查 ==="
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "${USER}@${HOST}" '
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "${TARGET_USER}@${TARGET_HOST}" '
   echo "--- 系统信息 ---"
   uname -a
   echo "--- OS版本 ---"
@@ -26,7 +19,7 @@ sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 "
   echo "--- OpenSSL版本 ---"
   openssl version
   echo "--- 可用包管理器 ---"
-  which dnf yum apt 2>/dev/null | head -1 || echo "none_found"
+  which dnf yum apt apk 2>/dev/null | head -4 || echo "none_found"
   echo "--- 磁盘空间 ---"
   df -h /tmp /usr | tail -2
 ' || {

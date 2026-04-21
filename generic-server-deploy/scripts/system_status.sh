@@ -1,16 +1,9 @@
 #!/bin/sh
 # 查看服务器系统状态
 
-ALI="${ALI:-}"
-HOST="${DEPLOY_HOST:-118.190.200.12}"
-USER="${DEPLOY_USER:-root}"
+. /var/minis/skills/generic-server-deploy/scripts/resolve_target.sh
 
-if [ -z "$ALI" ]; then
-  echo "ERROR: 环境变量 ALI 未设置"
-  exit 1
-fi
-
-sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${USER}@${HOST}" '
+sshpass -p "$ALI" ssh -o StrictHostKeyChecking=accept-new "${TARGET_USER}@${TARGET_HOST}" '
   echo "=== CPU ==="
   top -bn1 | head -3
   echo "=== 内存 ==="
