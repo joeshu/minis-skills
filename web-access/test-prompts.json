@@ -1,0 +1,50 @@
+[
+  {
+    "id": "wx-article-summary",
+    "user_prompt": "帮我总结这篇微信公众号文章的核心观点",
+    "expected_route": "extractor_first",
+    "expected_site": "mp.weixin.qq.com"
+  },
+  {
+    "id": "github-issue-release",
+    "user_prompt": "去 GitHub 看这个仓库的 issue 和 release",
+    "expected_route": "browser_interactive",
+    "expected_site": "github.com"
+  },
+  {
+    "id": "xiaohongshu-search-note",
+    "user_prompt": "帮我在小红书搜索某个博主并点进最新笔记",
+    "expected_route": "browser_interactive",
+    "expected_site": "xiaohongshu.com"
+  },
+  {
+    "id": "zhihu-answer-read",
+    "user_prompt": "打开知乎回答并提取正文",
+    "expected_route": "browser_interactive",
+    "expected_site": "zhihu.com"
+  },
+  {
+    "id": "weibo-timeline-collect",
+    "user_prompt": "帮我看微博某个话题下最近大家都在讨论什么",
+    "expected_route": "browser_interactive",
+    "expected_site": "weibo.com"
+  },
+  {
+    "id": "bilibili-video-summary-clues",
+    "user_prompt": "去 B站 看这个视频页的标题简介和评论，帮我总结主题",
+    "expected_route": "browser_interactive",
+    "expected_site": "bilibili.com"
+  },
+  {
+    "id": "juejin-article-summary",
+    "user_prompt": "帮我总结这篇掘金文章",
+    "expected_route": "extractor_first",
+    "expected_site": "juejin.cn"
+  },
+  {
+    "id": "find-hidden-url",
+    "user_prompt": "我以前打开过一个内部站点，现在忘了网址，帮我找找入口",
+    "expected_route": "search_then_browser",
+    "expected_site": null
+  }
+]
