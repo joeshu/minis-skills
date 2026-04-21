@@ -1,0 +1,17 @@
+[
+  {
+    "input": "继续上次项目并整理交接",
+    "expected_routed_system": "handoff",
+    "expected_chain": "plan->implement->review->receipt"
+  },
+  {
+    "input": "审计一下当前记忆系统",
+    "expected_routed_system": "memory-system-maintainer",
+    "expected_chain": "plan->implement->review->receipt"
+  },
+  {
+    "input": "新建一个系统项目骨架",
+    "expected_routed_system": "project-bootstrapper",
+    "expected_chain": "plan->implement->review->receipt"
+  }
+]
